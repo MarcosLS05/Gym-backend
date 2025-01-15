@@ -36,6 +36,11 @@ public class Tipousuario {
         return new ResponseEntity<Page<TipousuarioEntity>>(oTipousuarioService.getPage(oPageable, filter), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TipousuarioEntity> get(@PathVariable Long id) {
+        return new ResponseEntity<TipousuarioEntity>(oTipousuarioService.get(id), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oTipousuarioService.delete(id), HttpStatus.OK);

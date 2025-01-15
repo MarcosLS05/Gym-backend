@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.UsuarioService;
 
@@ -35,6 +36,11 @@ public class Usuario {
         return new ResponseEntity<Page<UsuarioEntity>>(oUsuarioService.getPage(oPageable, filter), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioEntity> get(@PathVariable Long id) {
+        return new ResponseEntity<UsuarioEntity>(oUsuarioService.get(id), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oUsuarioService.delete(id), HttpStatus.OK);
@@ -48,5 +54,10 @@ public class Usuario {
     @PostMapping("")
     public ResponseEntity<UsuarioEntity> update(@RequestBody UsuarioEntity oUsuarioEntity) {
         return new ResponseEntity<UsuarioEntity>(oUsuarioService.update(oUsuarioEntity), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/all")
+    public ResponseEntity<Long> deleteAll() {
+        return new ResponseEntity<Long>(oUsuarioService.deleteAll(), HttpStatus.OK);
     }
 }

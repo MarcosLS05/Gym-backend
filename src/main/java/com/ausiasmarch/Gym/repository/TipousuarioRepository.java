@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 public interface TipousuarioRepository extends JpaRepository<TipousuarioEntity, Long> {
 
-    Page<TipousuarioEntity> findByDescripcionContaining(String filter, Pageable oPageable);
+    Page<TipousuarioEntity> findByTituloContaining(String filter, Pageable oPageable);
 }

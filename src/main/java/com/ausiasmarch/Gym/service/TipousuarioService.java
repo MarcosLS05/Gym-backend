@@ -30,7 +30,7 @@ public class TipousuarioService implements ServiceInterface<TipousuarioEntity> {
 
         if (filter.isPresent()) {
             return oTipousuarioRepository
-                    .findByDescripcionContaining(filter.get(), oPageable);
+                    .findByTituloContaining(filter.get(), oPageable);
         } else {
             return oTipousuarioRepository.findAll(oPageable);
         }
@@ -38,7 +38,7 @@ public class TipousuarioService implements ServiceInterface<TipousuarioEntity> {
 
     public TipousuarioEntity get(Long id) {
         return oTipousuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de usuario no encontrado"));
         // return oTipousuarioRepository.findById(id).get();
     }
 
@@ -58,8 +58,8 @@ public class TipousuarioService implements ServiceInterface<TipousuarioEntity> {
     public TipousuarioEntity update(TipousuarioEntity oTipousuarioEntity) {
         TipousuarioEntity oTipousuarioEntityFromDatabase = oTipousuarioRepository.findById(oTipousuarioEntity.getId())
                 .get();
-        if (oTipousuarioEntity.getDescripcion() != null) {
-            oTipousuarioEntityFromDatabase.setDescripcion(oTipousuarioEntity.getDescripcion());
+        if (oTipousuarioEntity.getTitulo() != null) {
+            oTipousuarioEntityFromDatabase.setTitulo(oTipousuarioEntity.getTitulo());
         }
         return oTipousuarioRepository.save(oTipousuarioEntityFromDatabase);
     }

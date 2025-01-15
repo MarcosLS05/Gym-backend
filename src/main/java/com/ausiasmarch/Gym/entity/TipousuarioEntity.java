@@ -40,11 +40,11 @@ public class TipousuarioEntity {
         this.id = id;
     }
 
-    public String getDescripcion() {
+    public String getTitulo() {
         return titulo;
     }
 
-    public void setDescripcion(String titulo) {
+    public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
