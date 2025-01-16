@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
+import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.GrupocontrataService;
 
@@ -35,6 +36,11 @@ public class Grupocontrata {
             Pageable oPageable,
             @RequestParam  Optional<String> filter) {
         return new ResponseEntity<Page<GrupocontrataEntity>>(oGrupocontrataService.getPage(oPageable, filter), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GrupocontrataEntity> get(@PathVariable Long id) {
+        return new ResponseEntity<GrupocontrataEntity>(oGrupocontrataService.get(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

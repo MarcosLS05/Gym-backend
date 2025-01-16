@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
+import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.PlanesentrenamientoService;
 
 
@@ -38,6 +39,10 @@ public class Planesentrenamiento {
         return new ResponseEntity<Page<PlanesentrenamientoEntity>>(oPlanesentrenamientoService.getPage(oPageable, filter), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PlanesentrenamientoEntity> get(@PathVariable Long id) {
+        return new ResponseEntity<PlanesentrenamientoEntity>(oPlanesentrenamientoService.get(id), HttpStatus.OK);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oPlanesentrenamientoService.delete(id), HttpStatus.OK);
