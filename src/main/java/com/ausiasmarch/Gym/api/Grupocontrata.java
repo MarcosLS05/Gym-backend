@@ -26,7 +26,7 @@ import com.ausiasmarch.Gym.service.GrupocontrataService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/contrata")
+@RequestMapping("/grupocontrata")
 public class Grupocontrata {
     @Autowired
     GrupocontrataService oGrupocontrataService;
