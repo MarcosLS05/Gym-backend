@@ -18,7 +18,8 @@ public class TipousuarioEntity {
     private String titulo;
 
     @OneToMany(mappedBy = "tipousuario", fetch = FetchType.LAZY)
-    private java.util.List<UsuarioEntity> usuarios;
+    private java.util.List<UsuarioEntity> usuarios = new java.util.ArrayList<>();
+
 
     public TipousuarioEntity() {
     }
