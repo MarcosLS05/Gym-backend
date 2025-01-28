@@ -1,10 +1,17 @@
 package com.ausiasmarch.Gym.entity;
 
+import java.util.List;
+
+import com.ausiasmarch.Gym.api.Grupocontrata;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +27,10 @@ public class PlanesentrenamientoEntity {
 
     @Column(length = 500) // Campo opcional, máx. 500 caracteres
     private String descripcion;
+
+    @OneToMany(mappedBy = "planesentrenamiento", fetch = FetchType.LAZY)
+    private List<GrupocontrataEntity> grupocontrata;
+
 
     // Constructores
     public PlanesentrenamientoEntity() {
@@ -55,7 +66,9 @@ public class PlanesentrenamientoEntity {
         this.descripcion = descripcion;
     }
 
-
+    public int getGrupocontrata() {
+        return grupocontrata.size();
+    }
 
 }
 

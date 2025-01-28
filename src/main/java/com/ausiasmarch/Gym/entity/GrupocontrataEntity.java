@@ -29,11 +29,11 @@ public class GrupocontrataEntity {
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
-    private UsuarioEntity usuario; // Cambiar a minúscula
+    private UsuarioEntity usuario; 
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_planesentrenamiento")
-    private PlanesentrenamientoEntity planesentrenamiento; // Cambiar a minúscula
+    private PlanesentrenamientoEntity planesentrenamiento; 
 
     // Constructores
     public GrupocontrataEntity() {

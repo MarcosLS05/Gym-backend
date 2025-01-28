@@ -1,5 +1,7 @@
 package com.ausiasmarch.Gym.entity;
 
+import java.util.List;
+
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 
 import jakarta.persistence.Entity;
@@ -39,6 +41,8 @@ public class UsuarioEntity {
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_tipousuario")
     private TipousuarioEntity tipousuario;
+
+
 
 
 
