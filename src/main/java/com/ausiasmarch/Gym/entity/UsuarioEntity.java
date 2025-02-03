@@ -3,6 +3,7 @@ package com.ausiasmarch.Gym.entity;
 import java.util.List;
 
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,11 +39,14 @@ public class UsuarioEntity {
     @Email
     private String email;
 
+
+
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_tipousuario")
     private TipousuarioEntity tipousuario;
 
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
 
 
@@ -110,6 +114,14 @@ public class UsuarioEntity {
 
     public void setTipousuario(TipousuarioEntity tipousuario) {
         this.tipousuario = tipousuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

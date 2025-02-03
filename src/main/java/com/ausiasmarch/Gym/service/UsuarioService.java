@@ -9,11 +9,19 @@ import org.springframework.stereotype.Service;
 
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
+import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.UsuarioRepository;
+ 
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UsuarioService implements ServiceInterface<UsuarioEntity> {
 
+    HttpServletRequest oHttpServletRequest;
+
+    AuthService oAuthService;
+      
     @Autowired
     UsuarioRepository oUsuarioRepository;
 
@@ -52,6 +60,17 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
                             oPageable);
         } else {
             return oUsuarioRepository.findAll(oPageable);
+        }
+    }
+
+    public UsuarioEntity getByEmail(String email) {
+        UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario con email " + email + " no existe"));
+        if (oAuthService.isEntrenadorPersonalWithItsOwnData(oUsuarioEntity.getId()) || oAuthService.isAdmin()
+                || oAuthService.isClienteWithItsOwnData(oUsuarioEntity.getId())) {
+            return oUsuarioEntity;
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para ver el usuario");
         }
     }
 
@@ -100,6 +119,7 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         oUsuarioRepository.deleteAll();
         return this.count();
     }
+
 
     public UsuarioEntity randomSelection() {
         return oUsuarioRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();

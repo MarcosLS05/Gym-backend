@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ausiasmarch.Gym.entity.TipousuarioEntity;
+
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.UsuarioService;
 
@@ -34,6 +34,11 @@ public class Usuario {
             Pageable oPageable,
             @RequestParam  Optional<String> filter) {
         return new ResponseEntity<Page<UsuarioEntity>>(oUsuarioService.getPage(oPageable, filter), HttpStatus.OK);
+    }
+
+    @GetMapping("/byemail/{email}")
+    public ResponseEntity<UsuarioEntity> getUsuarioByEmail(@PathVariable(value = "email") String email) {
+        return ResponseEntity.ok(oUsuarioService.getByEmail(email));
     }
 
     @GetMapping("/{id}")
