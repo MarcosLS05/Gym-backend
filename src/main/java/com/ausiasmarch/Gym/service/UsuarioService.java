@@ -20,6 +20,7 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
 
     HttpServletRequest oHttpServletRequest;
 
+    @Autowired
     AuthService oAuthService;
       
     @Autowired
