@@ -11,8 +11,8 @@ import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.UsuarioRepository;
- 
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
@@ -52,18 +52,6 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         return oUsuarioRepository.count();
     }
 
-    public Page<UsuarioEntity> getPage(Pageable oPageable, Optional<String> filter) {
-
-        if (filter.isPresent()) {
-            return oUsuarioRepository
-                    .findByNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContaining(
-                            filter.get(), filter.get(), filter.get(), filter.get(),
-                            oPageable);
-        } else {
-            return oUsuarioRepository.findAll(oPageable);
-        }
-    }
-
     public UsuarioEntity getByEmail(String email) {
         UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("El usuario con email " + email + " no existe"));
@@ -76,54 +64,92 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     }
 
     public UsuarioEntity get(Long id) {
-        return oUsuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        // return oUsuarioRepository.findById(id).get();
+        if (oAuthService.isEntrenadorPersonalWithItsOwnData(id) || oAuthService.isAdmin()
+                || oAuthService.isClienteWithItsOwnData(id)) {
+            Optional<UsuarioEntity> usuario = oUsuarioRepository.findById(id);
+            if (usuario.isPresent()) {
+                return usuario.get();
+            } else {
+                throw new EntityNotFoundException("Usuario no encontrado con ID: " + id);
+            }
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para ver el usuario");
+        }
+    }
+
+    public Page<UsuarioEntity> getPage(Pageable oPageable, Optional<String> filter) {
+        if (oAuthService.isAdmin()) {
+            if (filter.isPresent()) {
+                return oUsuarioRepository
+                        .findByNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContaining(
+                                filter.get(), filter.get(), filter.get(), filter.get(),
+                                oPageable);
+            } else {
+                return oUsuarioRepository.findAll(oPageable);
+            }
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para ver los usuarios");
+        }
+
     }
 
     public Long count() {
-        return oUsuarioRepository.count();
+        if (!oAuthService.isAdmin()) {
+            throw new UnauthorizedAccessException("No tienes permisos para contar los usuarios");
+        } else {
+            return oUsuarioRepository.count();
+        }
     }
 
     public Long delete(Long id) {
-        oUsuarioRepository.deleteById(id);
-        return 1L;
+        if (oAuthService.isAdmin()) {
+            oUsuarioRepository.deleteById(id);
+            return 1L;
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para borrar el usuario");
+        }
     }
 
     public UsuarioEntity create(UsuarioEntity oUsuarioEntity) {
-        return oUsuarioRepository.save(oUsuarioEntity);
+        if (oAuthService.isAdmin()) {
+            return oUsuarioRepository.save(oUsuarioEntity);
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+        }
     }
 
     public UsuarioEntity update(UsuarioEntity oUsuarioEntity) {
-        UsuarioEntity oUsuarioEntityFromDatabase = oUsuarioRepository.findById(oUsuarioEntity.getId()).get();
-        if (oUsuarioEntity.getNombre() != null) {
-            oUsuarioEntityFromDatabase.setNombre(oUsuarioEntity.getNombre());
+        if (oAuthService.isEntrenadorPersonalWithItsOwnData(oUsuarioEntity.getId()) || oAuthService.isAdmin()
+                || oAuthService.isClienteWithItsOwnData(oUsuarioEntity.getId())) {
+            UsuarioEntity oUsuarioEntityFromDatabase = oUsuarioRepository.findById(oUsuarioEntity.getId()).get();
+            if (oUsuarioEntity.getNombre() != null) {
+                oUsuarioEntityFromDatabase.setNombre(oUsuarioEntity.getNombre());
+            }
+            if (oUsuarioEntity.getApellido1() != null) {
+                oUsuarioEntityFromDatabase.setApellido1(oUsuarioEntity.getApellido1());
+            }
+            if (oUsuarioEntity.getApellido2() != null) {
+                oUsuarioEntityFromDatabase.setApellido2(oUsuarioEntity.getApellido2());
+            }
+            if (oUsuarioEntity.getEmail() != null) {
+                oUsuarioEntityFromDatabase.setEmail(oUsuarioEntity.getEmail());
+            }
+            return oUsuarioRepository.save(oUsuarioEntityFromDatabase);
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para modificar el usuario");
         }
-        if (oUsuarioEntity.getApellido1() != null) {
-            oUsuarioEntityFromDatabase.setApellido1(oUsuarioEntity.getApellido1());
-        }
-        if (oUsuarioEntity.getApellido2() != null) {
-            oUsuarioEntityFromDatabase.setApellido2(oUsuarioEntity.getApellido2());
-        }
-        if (oUsuarioEntity.getEmail() != null) {
-            oUsuarioEntityFromDatabase.setEmail(oUsuarioEntity.getEmail());
-        }
-
-        if (oUsuarioEntity.getTipousuario() != null) {
-            oUsuarioEntityFromDatabase.setTipousuario(oUsuarioEntity.getTipousuario());
-        }
-        
-        return oUsuarioRepository.save(oUsuarioEntityFromDatabase);
     }
 
     public Long deleteAll() {
-        oUsuarioRepository.deleteAll();
-        return this.count();
+        if (!oAuthService.isAdmin()) {
+            throw new UnauthorizedAccessException("No tienes permisos para borrar todos los usuarios");
+        } else {
+            oUsuarioRepository.deleteAll();
+            return this.count();
+        }
     }
-
 
     public UsuarioEntity randomSelection() {
         return oUsuarioRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();
     }
-
 }

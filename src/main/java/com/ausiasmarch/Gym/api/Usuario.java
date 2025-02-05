@@ -51,12 +51,16 @@ public class Usuario {
         return new ResponseEntity<Long>(oUsuarioService.delete(id), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<UsuarioEntity> create(@RequestBody UsuarioEntity oUsuarioEntity) {
-        return new ResponseEntity<UsuarioEntity>(oUsuarioService.create(oUsuarioEntity), HttpStatus.OK);
+    @PostMapping("/new")
+    public ResponseEntity<UsuarioEntity> createUsuario(@RequestBody UsuarioEntity usuario) {
+        if (usuario.getTipousuario() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        UsuarioEntity savedUsuario = oUsuarioService.create(usuario);
+        return ResponseEntity.ok(savedUsuario);
     }
 
-    @PostMapping("{id}")
+    @PutMapping("")
     public ResponseEntity<UsuarioEntity> update(@RequestBody UsuarioEntity oUsuarioEntity) {
         return new ResponseEntity<UsuarioEntity>(oUsuarioService.update(oUsuarioEntity), HttpStatus.OK);
     }
