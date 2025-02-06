@@ -48,12 +48,12 @@ public class Planesentrenamiento {
         return new ResponseEntity<Long>(oPlanesentrenamientoService.delete(id), HttpStatus.OK);
     }
 
-    @PutMapping("")
+    @PostMapping("/new")
     public ResponseEntity<PlanesentrenamientoEntity> create(@RequestBody PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         return new ResponseEntity<PlanesentrenamientoEntity>(oPlanesentrenamientoService.create(oPlanesentrenamientoEntity), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PutMapping("")
     public ResponseEntity<PlanesentrenamientoEntity> update(@RequestBody PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         return new ResponseEntity<PlanesentrenamientoEntity>(oPlanesentrenamientoService.update(oPlanesentrenamientoEntity), HttpStatus.OK);
     }

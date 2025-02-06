@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
+import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
+import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
 
 @Service
@@ -17,11 +19,14 @@ public class PlanesentrenamientoService {
     @Autowired
     private RandomService oRandomService;
     @Autowired
-    private PlanesentrenamientoRepository planesentrenamientoRepository;
+    private PlanesentrenamientoRepository oPlanesentrenamientoRepository;
+
+    @Autowired
+    private AuthService oAuthService;
 
     // Obtener un plan por ID
     public PlanesentrenamientoEntity get(Long id) {
-        return planesentrenamientoRepository.findById(id)
+        return oPlanesentrenamientoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan de entrenamiento no encontrado: " + id));
     }
 
@@ -29,10 +34,10 @@ public class PlanesentrenamientoService {
     public Page<PlanesentrenamientoEntity> getPage(Pageable pageable, Optional<String> filter) {
         if (filter.isPresent() && !filter.get().isBlank()) {
             String filtro = filter.get();
-            return planesentrenamientoRepository.findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
+            return oPlanesentrenamientoRepository.findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
                     filtro, filtro, pageable);
         } else {
-            return planesentrenamientoRepository.findAll(pageable);
+            return oPlanesentrenamientoRepository.findAll(pageable);
         }
     }
 
@@ -42,58 +47,51 @@ public class PlanesentrenamientoService {
             PlanesentrenamientoEntity planesentrenamientoEntity = new PlanesentrenamientoEntity();
             planesentrenamientoEntity.setTitulo("Plan de entrenamiento " + i);
             planesentrenamientoEntity.setDescripcion("Descripción del plan de entrenamiento " + i);
-            planesentrenamientoRepository.save(planesentrenamientoEntity);
+            oPlanesentrenamientoRepository.save(planesentrenamientoEntity);
             count++;
         }
         return count;
     }
     
     public PlanesentrenamientoEntity randomSelection() {
-        Long count = planesentrenamientoRepository.count();
+        Long count = oPlanesentrenamientoRepository.count();
         if (count == 0) {
             throw new ResourceNotFoundException("No hay registros en la tabla planesentrenamiento.");
         }
         int randomIndex = oRandomService.getRandomInt(0, count.intValue() - 1);
         Pageable pageable = Pageable.ofSize(1).withPage(randomIndex);
-        Page<PlanesentrenamientoEntity> page = planesentrenamientoRepository.findAll(pageable);
+        Page<PlanesentrenamientoEntity> page = oPlanesentrenamientoRepository.findAll(pageable);
         return page.getContent().get(0);
     }
     
 
     // Crear un nuevo plan
-    public PlanesentrenamientoEntity create(PlanesentrenamientoEntity plan) {
-        return planesentrenamientoRepository.save(plan);
+    public PlanesentrenamientoEntity create(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
+        return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntity);
     }
 
-    // Actualizar un plan existente
-    public PlanesentrenamientoEntity update(Long id, PlanesentrenamientoEntity plan) {
-        if (!planesentrenamientoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Plan de entrenamiento no encontrado: " + id);
-        }
-        plan.setId(id);
-        return planesentrenamientoRepository.save(plan);
-    }
+    
 
     // Eliminar un plan por ID
     public Long delete(Long id) {
-        planesentrenamientoRepository.deleteById(id);
+        oPlanesentrenamientoRepository.deleteById(id);
         return 1L;
     }
 
     // Contar el total de planes
     public Long count() {
-        return planesentrenamientoRepository.count();
+        return oPlanesentrenamientoRepository.count();
     }
 
     // Eliminar todos los planes
     public void deleteAll() {
-        planesentrenamientoRepository.deleteAll();
+        oPlanesentrenamientoRepository.deleteAll();
     }
 
     public PlanesentrenamientoEntity update(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         // Buscar la entidad existente en la base de datos por su ID
         PlanesentrenamientoEntity oPlanesentrenamientoEntityFromDatabase = 
-            planesentrenamientoRepository.findById(oPlanesentrenamientoEntity.getId())
+        oPlanesentrenamientoRepository.findById(oPlanesentrenamientoEntity.getId())
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Plan de entrenamiento con ID " + oPlanesentrenamientoEntity.getId() + " no encontrado"));
     
@@ -108,7 +106,7 @@ public class PlanesentrenamientoService {
         }
     
         // Guardar y devolver la entidad actualizada
-        return planesentrenamientoRepository.save(oPlanesentrenamientoEntityFromDatabase);
+        return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntityFromDatabase);
     }
     
 }

@@ -66,9 +66,9 @@ public class PlanesentrenamientoEntity {
         this.descripcion = descripcion;
     }
 
-    public int getGrupocontrata() {
-        return grupocontrata.size();
-    }
+//    public int getGrupocontrata() {
+//        return grupocontrata.size();
+//    }
 
 }
 
