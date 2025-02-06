@@ -48,12 +48,12 @@ public class Grupocontrata {
         return new ResponseEntity<Long>(oGrupocontrataService.delete(id), HttpStatus.OK);
     }
 
-    @PutMapping("")
+    @PostMapping("/new")
     public ResponseEntity<GrupocontrataEntity> create(@RequestBody GrupocontrataEntity oGrupocontrataEntity) {
         return new ResponseEntity<GrupocontrataEntity>(oGrupocontrataService.create(oGrupocontrataEntity), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PutMapping("")
     public ResponseEntity<GrupocontrataEntity> update(@RequestBody GrupocontrataEntity oGrupocontrataEntity) {
         return new ResponseEntity<GrupocontrataEntity>(oGrupocontrataService.update(oGrupocontrataEntity), HttpStatus.OK);
     }
