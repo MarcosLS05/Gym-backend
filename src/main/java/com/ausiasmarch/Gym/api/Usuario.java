@@ -46,6 +46,15 @@ public class Usuario {
         return new ResponseEntity<UsuarioEntity>(oUsuarioService.get(id), HttpStatus.OK);
     }
 
+    @GetMapping("xtipousuario/{id}")
+    public ResponseEntity<Page<UsuarioEntity>> getPageXTipousuario(
+            Pageable oPageable,
+            @RequestParam Optional<String> filter,
+            @PathVariable Optional<Long> id) {
+        return new ResponseEntity<Page<UsuarioEntity>>(oUsuarioService.getPageXTipoUsuario(oPageable, filter, id),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oUsuarioService.delete(id), HttpStatus.OK);

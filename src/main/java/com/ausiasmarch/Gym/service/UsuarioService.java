@@ -93,6 +93,24 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
 
     }
 
+    public Page<UsuarioEntity> getPageXTipoUsuario(Pageable oPageable, Optional<String> filter, Optional<Long> id_tipousuario) {
+        if (filter.isPresent()) {
+            if (id_tipousuario.isPresent()) {
+                return oUsuarioRepository
+                        .findByTipousuarioIdAndTituloContaining(
+                            id_tipousuario.get(), filter.get(), oPageable);
+            } else {
+                throw new ResourceNotFoundException("Tipousuario no encontrado");
+            }            
+        } else {
+            if (id_tipousuario.isPresent()) {
+                return oUsuarioRepository.findByTipousuarioId(id_tipousuario.get(), oPageable);
+            } else {
+                throw new ResourceNotFoundException("Tipousuario no encontrado");
+            }
+        }
+    }
+
     public Long count() {
         if (!oAuthService.isAdmin()) {
             throw new UnauthorizedAccessException("No tienes permisos para contar los usuarios");
