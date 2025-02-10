@@ -73,7 +73,7 @@ public class GrupocontrataEntity {
         return usuario;
     }
 
-    public void setUsuario(UsuarioEntity usuario) { // Corregir asignación
+    public void setUsuario(UsuarioEntity usuario) { 
         this.usuario = usuario;
     }
 

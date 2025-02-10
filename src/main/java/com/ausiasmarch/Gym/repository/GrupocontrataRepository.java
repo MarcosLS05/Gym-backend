@@ -11,6 +11,8 @@ import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 @Repository
 public interface GrupocontrataRepository extends JpaRepository<GrupocontrataEntity, Long> {
 
+    Page<GrupocontrataEntity> findByUsuarioId(Long id, Pageable oPageable);
+
     // Método personalizado corregido
     Page<GrupocontrataEntity> findByUsuarioNombreContainingOrPlanesentrenamientoTituloContaining(
         String usuarioNombre, String planesentrenamientoTitulo, Pageable pageable);

@@ -10,6 +10,8 @@ import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
 @Repository
 public interface PlanesentrenamientoRepository extends JpaRepository<PlanesentrenamientoEntity, Long> {
 
+    Page<PlanesentrenamientoEntity> findByGrupocontrataId(Long id, Pageable pageable);
+
     // Buscar planes por título (case-insensitive)
     Page<PlanesentrenamientoEntity> findByTituloContainingIgnoreCase(String titulo, Pageable pageable);
 

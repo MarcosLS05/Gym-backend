@@ -29,6 +29,7 @@ public class PlanesentrenamientoEntity {
     private String descripcion;
 
     @OneToMany(mappedBy = "planesentrenamiento", fetch = FetchType.LAZY)
+    
     private List<GrupocontrataEntity> grupocontrata;
 
 
@@ -66,9 +67,9 @@ public class PlanesentrenamientoEntity {
         this.descripcion = descripcion;
     }
 
-//    public int getGrupocontrata() {
-//        return grupocontrata.size();
-//    }
+    public int getGrupocontrata() {
+       return grupocontrata.size();
+    }
 
 }
 

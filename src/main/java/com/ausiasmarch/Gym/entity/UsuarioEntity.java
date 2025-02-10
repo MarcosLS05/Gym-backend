@@ -39,7 +39,8 @@ public class UsuarioEntity {
     @Email
     private String email;
 
-
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<GrupocontrataEntity> grupocontrata;
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_tipousuario")
@@ -122,6 +123,10 @@ public class UsuarioEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getGrupocontrata() {
+        return grupocontrata.size();
     }
 
 }

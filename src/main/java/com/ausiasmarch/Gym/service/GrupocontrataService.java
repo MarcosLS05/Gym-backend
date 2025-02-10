@@ -8,6 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
+import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
+import com.ausiasmarch.Gym.entity.UsuarioEntity;
+import com.ausiasmarch.Gym.repository.UsuarioRepository;
+import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.repository.GrupocontrataRepository;
 
@@ -16,6 +20,12 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Autowired
     private GrupocontrataRepository grupocontrataRepository;
+
+    @Autowired
+    private UsuarioRepository UsuarioRepository;
+
+    @Autowired
+    private PlanesentrenamientoRepository PlanesentrenamientoRepository;
 
     @Autowired
     private RandomService oRandomService;
@@ -89,6 +99,9 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public GrupocontrataEntity create(GrupocontrataEntity grupocontrataEntity) {
+
+        grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
+        grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
         return grupocontrataRepository.save(grupocontrataEntity);
     }
 
@@ -97,8 +110,22 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
         if (!grupocontrataRepository.existsById(grupocontrataEntity.getId())) {
             throw new ResourceNotFoundException("Grupocontrata con ID " + grupocontrataEntity.getId() + " no encontrado.");
         }
+
+        if (grupocontrataEntity.getUsuario() != null && grupocontrataEntity.getUsuario().getId() != null) {
+            UsuarioEntity usuario = UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + grupocontrataEntity.getUsuario().getId() + " no encontrado."));
+            grupocontrataEntity.setUsuario(usuario);
+        }
+
+        if (grupocontrataEntity.getPlanesentrenamiento() != null && grupocontrataEntity.getPlanesentrenamiento().getId() != null) {
+            PlanesentrenamientoEntity plan = PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Plan de entrenamiento con ID " + grupocontrataEntity.getPlanesentrenamiento().getId() + " no encontrado."));
+            grupocontrataEntity.setPlanesentrenamiento(plan);
+        }
+
         return grupocontrataRepository.save(grupocontrataEntity);
     }
+
 
     @Override
     public Long deleteAll() {
