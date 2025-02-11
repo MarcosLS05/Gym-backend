@@ -61,11 +61,12 @@ public class TipousuarioService implements ServiceInterface<TipousuarioEntity> {
     }
 
     public Long delete(Long id) {
-        if (!oAuthService.isAdmin()) {
+        if (oAuthService.isAdmin()) {
+            oTipousuarioRepository.deleteById(id);
+            return 1L;
+        } else {
             throw new UnauthorizedAccessException("No tienes permisos para borrar el tipo de usuario");
         }
-        oTipousuarioRepository.deleteById(id);
-        return 1L;
     }
 
     public TipousuarioEntity create(TipousuarioEntity oTipousuarioEntity) {

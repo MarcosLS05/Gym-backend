@@ -51,7 +51,7 @@ public class Tipousuario {
         return new ResponseEntity<TipousuarioEntity>(oTipousuarioService.create(oTipousuarioEntity), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PutMapping("")
     public ResponseEntity<TipousuarioEntity> update(@RequestBody TipousuarioEntity oTipousuarioEntity) {
         return new ResponseEntity<TipousuarioEntity>(oTipousuarioService.update(oTipousuarioEntity), HttpStatus.OK);
     }
