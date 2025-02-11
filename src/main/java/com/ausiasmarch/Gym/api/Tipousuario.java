@@ -46,7 +46,7 @@ public class Tipousuario {
         return new ResponseEntity<Long>(oTipousuarioService.delete(id), HttpStatus.OK);
     }
 
-    @PutMapping("/new")
+    @PostMapping("/new")
     public ResponseEntity<TipousuarioEntity> create(@RequestBody TipousuarioEntity oTipousuarioEntity) {
         return new ResponseEntity<TipousuarioEntity>(oTipousuarioService.create(oTipousuarioEntity), HttpStatus.OK);
     }

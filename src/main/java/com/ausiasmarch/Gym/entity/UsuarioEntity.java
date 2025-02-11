@@ -3,6 +3,7 @@ package com.ausiasmarch.Gym.entity;
 import java.util.List;
 
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
@@ -40,6 +41,7 @@ public class UsuarioEntity {
     private String email;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<GrupocontrataEntity> grupocontrata;
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)

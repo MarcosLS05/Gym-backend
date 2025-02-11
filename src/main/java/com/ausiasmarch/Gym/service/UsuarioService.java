@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
+import com.ausiasmarch.Gym.repository.TipousuarioRepository;
 import com.ausiasmarch.Gym.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,9 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
 
     @Autowired
     AuthService oAuthService;
+
+    @Autowired
+    TipousuarioRepository oTipousuarioRepository;
       
     @Autowired
     UsuarioRepository oUsuarioRepository;
@@ -128,13 +132,21 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         }
     }
 
+    @Override
     public UsuarioEntity create(UsuarioEntity oUsuarioEntity) {
         if (oAuthService.isAdmin()) {
+            // Verificar si el TipoUsuario existe antes de asignarlo
+            oUsuarioEntity.setTipousuario(
+                oTipousuarioRepository.findById(oUsuarioEntity.getTipousuario().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("TipoUsuario no encontrado"))
+            );
+            
             return oUsuarioRepository.save(oUsuarioEntity);
         } else {
             throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
         }
     }
+    
 
     public UsuarioEntity update(UsuarioEntity oUsuarioEntity) {
         if (oAuthService.isEntrenadorPersonalWithItsOwnData(oUsuarioEntity.getId()) || oAuthService.isAdmin()
