@@ -3,6 +3,7 @@ package com.ausiasmarch.Gym.entity;
 import java.util.List;
 
 import com.ausiasmarch.Gym.api.Grupocontrata;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +30,7 @@ public class PlanesentrenamientoEntity {
     private String descripcion;
 
     @OneToMany(mappedBy = "planesentrenamiento", fetch = FetchType.LAZY)
-    
+    @JsonIgnore
     private List<GrupocontrataEntity> grupocontrata;
 
 
