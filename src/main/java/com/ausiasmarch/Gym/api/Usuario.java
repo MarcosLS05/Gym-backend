@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.UsuarioService;
+import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
@@ -28,6 +29,8 @@ import com.ausiasmarch.Gym.service.UsuarioService;
 public class Usuario {
     @Autowired
     UsuarioService oUsuarioService;
+
+
 
     @GetMapping("")
     public ResponseEntity<Page<UsuarioEntity>> getPage(
@@ -77,5 +80,10 @@ public class Usuario {
     @DeleteMapping("/all")
     public ResponseEntity<Long> deleteAll() {
         return new ResponseEntity<Long>(oUsuarioService.deleteAll(), HttpStatus.OK);
+    }
+
+    @PutMapping("/settipousuario/{id}/{idtipousuario}")
+    public ResponseEntity<UsuarioEntity> setTipousuario(@PathVariable Long id, @PathVariable Long idtipousuario) {
+        return new ResponseEntity<UsuarioEntity>(oUsuarioService.setTipoUsuario(id, idtipousuario), HttpStatus.OK);
     }
 }

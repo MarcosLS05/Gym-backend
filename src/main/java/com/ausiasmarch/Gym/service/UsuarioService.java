@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
@@ -28,10 +29,10 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     TipousuarioRepository oTipousuarioRepository;
       
     @Autowired
-    UsuarioRepository oUsuarioRepository;
+    private TipousuarioService oTipousuarioService;
 
     @Autowired
-    TipousuarioService oTipousuarioService;
+    private UsuarioRepository oUsuarioRepository;
 
     @Autowired
     RandomService oRandomService;
@@ -130,6 +131,13 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         } else {
             throw new UnauthorizedAccessException("No tienes permisos para borrar el usuario");
         }
+    }
+
+    public UsuarioEntity setTipoUsuario(Long id, Long idtipousuario) {
+        UsuarioEntity oUsuarioEntity = oUsuarioRepository.findById(id).get();
+        TipousuarioEntity oTipousuarioEntity = oTipousuarioService.get(idtipousuario);
+        oUsuarioEntity.setTipousuario(oTipousuarioEntity);
+        return oUsuarioRepository.save(oUsuarioEntity);
     }
 
     @Override
