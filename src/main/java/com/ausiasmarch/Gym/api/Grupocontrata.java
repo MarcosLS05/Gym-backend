@@ -43,6 +43,15 @@ public class Grupocontrata {
         return new ResponseEntity<GrupocontrataEntity>(oGrupocontrataService.get(id), HttpStatus.OK);
     }
 
+    @GetMapping("/xusuario/{id}")
+    public ResponseEntity<Page<GrupocontrataEntity>> getPageXUsuario(
+            Pageable oPageable,
+            @RequestParam Optional<String> filter,
+            @PathVariable Optional<Long> id) {
+        return new ResponseEntity<Page<GrupocontrataEntity>>(oGrupocontrataService.getPageXUsuario(oPageable, filter, id),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oGrupocontrataService.delete(id), HttpStatus.OK);

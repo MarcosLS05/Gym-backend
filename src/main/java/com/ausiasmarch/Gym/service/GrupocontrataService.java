@@ -79,6 +79,25 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
         }
     }
 
+    public Page<GrupocontrataEntity> getPageXUsuario(Pageable oPageable, Optional<String> filter, Optional<Long> id_usuario) {
+        if (filter.isPresent()) {
+            if (id_usuario.isPresent()) {
+                return grupocontrataRepository
+                        .findByUsuarioIdAndTituloContainingOrDescipcionContaining(
+                                filter.get(), filter.get(), id_usuario.get(),
+                                oPageable);
+            } else {
+                throw new ResourceNotFoundException("Usuario no encontrado");
+            }
+        } else {
+            if (id_usuario.isPresent()) {
+                return grupocontrataRepository.findByUsuarioId(id_usuario.get(), oPageable);
+            } else {
+                throw new ResourceNotFoundException("Usuario no encontrado");
+            }
+        }
+    }
+
     @Override
     public GrupocontrataEntity get(Long id) {
         return grupocontrataRepository.findById(id)
