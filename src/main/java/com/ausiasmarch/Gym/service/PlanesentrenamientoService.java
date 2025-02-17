@@ -67,15 +67,24 @@ public class PlanesentrenamientoService {
 
     // Crear un nuevo plan
     public PlanesentrenamientoEntity create(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
-        return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntity);
+        if (oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
+            return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntity);
+        } else {
+            throw new UnauthorizedAccessException("No tienes permiso para crear planes de entrenamiento.");
+        }
     }
 
     
 
     // Eliminar un plan por ID
     public Long delete(Long id) {
-        oPlanesentrenamientoRepository.deleteById(id);
-        return 1L;
+        if (oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
+            oPlanesentrenamientoRepository.deleteById(id);
+            return 1L;
+        }else {
+            throw new UnauthorizedAccessException("No tienes permiso para borrar el plan de entrenamiento.");
+        }
+
     }
 
     // Contar el total de planes
@@ -85,11 +94,17 @@ public class PlanesentrenamientoService {
 
     // Eliminar todos los planes
     public void deleteAll() {
-        oPlanesentrenamientoRepository.deleteAll();
+        if (!oAuthService.isAdmin()){
+            oPlanesentrenamientoRepository.deleteAll();
+        }else{
+            throw new UnauthorizedAccessException("No tienes permiso para borrar todos los planes de entrenamiento.");
+        }
+        
     }
 
     public PlanesentrenamientoEntity update(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
-        // Buscar la entidad existente en la base de datos por su ID
+        if (oAuthService.isAdmin() ||oAuthService.isEntrenadorPersonal()) {
+                    // Buscar la entidad existente en la base de datos por su ID
         PlanesentrenamientoEntity oPlanesentrenamientoEntityFromDatabase = 
         oPlanesentrenamientoRepository.findById(oPlanesentrenamientoEntity.getId())
             .orElseThrow(() -> new ResourceNotFoundException(
@@ -107,7 +122,11 @@ public class PlanesentrenamientoService {
     
         // Guardar y devolver la entidad actualizada
         return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntityFromDatabase);
+            
+        } else {
+            throw new UnauthorizedAccessException("No tienes permiso para modificar el plan de entrenamiento.");
+        }
+
     }
-    
 }
 
