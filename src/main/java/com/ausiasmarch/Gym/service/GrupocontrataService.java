@@ -110,8 +110,11 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public GrupocontrataEntity get(Long id) {
-        return grupocontrataRepository.findById(id)
+        if (oAuthService.isAdmin()) {
+            return grupocontrataRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Grupocontrata con ID " + id + " no encontrado."));
+        }
+        throw new UnauthorizedAccessException("No tienes permiso para ver el grupo de contrata.");
     }
 
     @Override
