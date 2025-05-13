@@ -13,6 +13,7 @@ import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.repository.UsuarioRepository;
 import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
+import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.GrupocontrataRepository;
 
 @Service
@@ -23,6 +24,9 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Autowired
     private UsuarioRepository UsuarioRepository;
+
+    @Autowired
+    AuthService oAuthService;
 
     @Autowired
     private PlanesentrenamientoRepository PlanesentrenamientoRepository;
@@ -71,12 +75,18 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public Page<GrupocontrataEntity> getPage(Pageable oPageable, Optional<String> filter) {
-        if (filter.isPresent()) {
-            return grupocontrataRepository.findByUsuarioNombreContainingOrPlanesentrenamientoTituloContaining(
-                filter.get(), filter.get(), oPageable);
+        if(oAuthService.isAdmin()){
+            if (filter.isPresent()) {
+                return grupocontrataRepository.findByUsuarioNombreContainingOrPlanesentrenamientoTituloContaining(
+                    filter.get(), filter.get(), oPageable);
+            } else {
+                return grupocontrataRepository.findAll(oPageable);
+            }
         } else {
-            return grupocontrataRepository.findAll(oPageable);
+            throw new UnauthorizedAccessException("No tienes permisos para ver los grupos de contrata.");
         }
+        
+
     }
 
     public Page<GrupocontrataEntity> getPageXUsuario(Pageable oPageable, Optional<String> filter, Optional<Long> id_usuario) {
@@ -100,8 +110,11 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public GrupocontrataEntity get(Long id) {
-        return grupocontrataRepository.findById(id)
+        if (oAuthService.isAdmin()) {
+            return grupocontrataRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Grupocontrata con ID " + id + " no encontrado."));
+        }
+        throw new UnauthorizedAccessException("No tienes permiso para ver el grupo de contrata.");
     }
 
     @Override
@@ -111,45 +124,67 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public Long delete(Long id) {
-        GrupocontrataEntity grupocontrataEntity = get(id); // Llama a get para validar existencia
-        grupocontrataRepository.delete(grupocontrataEntity);
-        return id;
+        if(oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
+            GrupocontrataEntity grupocontrataEntity = get(id); 
+            grupocontrataRepository.delete(grupocontrataEntity);
+            return id;  
+        }else{ 
+            throw new UnauthorizedAccessException("No tienes permiso para borrar el grupo de contrata.");
+        }
+
     }
 
     @Override
     public GrupocontrataEntity create(GrupocontrataEntity grupocontrataEntity) {
+        if(oAuthService.isAdmin() || oAuthService.isCliente() ) {
+            grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
+            grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
+            return grupocontrataRepository.save(grupocontrataEntity);  
+        }else{
+            throw new UnauthorizedAccessException("No tienes permiso para crear el grupo de contrata.");
+        }
 
-        grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
-        grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
-        return grupocontrataRepository.save(grupocontrataEntity);
     }
 
     @Override
     public GrupocontrataEntity update(GrupocontrataEntity grupocontrataEntity) {
-        if (!grupocontrataRepository.existsById(grupocontrataEntity.getId())) {
-            throw new ResourceNotFoundException("Grupocontrata con ID " + grupocontrataEntity.getId() + " no encontrado.");
+
+        if (oAuthService.isAdmin()) {
+            if (!grupocontrataRepository.existsById(grupocontrataEntity.getId())) {
+                throw new ResourceNotFoundException("Grupocontrata con ID " + grupocontrataEntity.getId() + " no encontrado.");
+            }
+    
+            if (grupocontrataEntity.getUsuario() != null && grupocontrataEntity.getUsuario().getId() != null) {
+                UsuarioEntity usuario = UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + grupocontrataEntity.getUsuario().getId() + " no encontrado."));
+                grupocontrataEntity.setUsuario(usuario);
+            }
+    
+            if (grupocontrataEntity.getPlanesentrenamiento() != null && grupocontrataEntity.getPlanesentrenamiento().getId() != null) {
+                PlanesentrenamientoEntity plan = PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Plan de entrenamiento con ID " + grupocontrataEntity.getPlanesentrenamiento().getId() + " no encontrado."));
+                grupocontrataEntity.setPlanesentrenamiento(plan);
+            }
+    
+            return grupocontrataRepository.save(grupocontrataEntity);  
+        } else {
+
+            throw new UnauthorizedAccessException("No tienes permiso para modificar el grupo de contrata.");
+        
         }
 
-        if (grupocontrataEntity.getUsuario() != null && grupocontrataEntity.getUsuario().getId() != null) {
-            UsuarioEntity usuario = UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Usuario con ID " + grupocontrataEntity.getUsuario().getId() + " no encontrado."));
-            grupocontrataEntity.setUsuario(usuario);
-        }
-
-        if (grupocontrataEntity.getPlanesentrenamiento() != null && grupocontrataEntity.getPlanesentrenamiento().getId() != null) {
-            PlanesentrenamientoEntity plan = PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Plan de entrenamiento con ID " + grupocontrataEntity.getPlanesentrenamiento().getId() + " no encontrado."));
-            grupocontrataEntity.setPlanesentrenamiento(plan);
-        }
-
-        return grupocontrataRepository.save(grupocontrataEntity);
     }
 
 
     @Override
     public Long deleteAll() {
-        Long count = grupocontrataRepository.count();
-        grupocontrataRepository.deleteAll();
-        return count;
+        if(oAuthService.isAdmin()) {
+            Long count = grupocontrataRepository.count();
+            grupocontrataRepository.deleteAll();
+            return count;
+        }else{
+            throw new UnauthorizedAccessException("No tienes permiso para borrar todos los grupos de contrata.");
+        }
+
     }
 }
