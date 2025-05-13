@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.api;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,22 @@ public class Usuario {
     @PutMapping("")
     public ResponseEntity<UsuarioEntity> update(@RequestBody UsuarioEntity oUsuarioEntity) {
         return new ResponseEntity<UsuarioEntity>(oUsuarioService.update(oUsuarioEntity), HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Map<String, String> datos) {
+        try {
+            UsuarioEntity nuevo = oUsuarioService.registrarCliente(
+                datos.get("nombre"),
+                datos.get("apellido1"),
+                datos.get("apellido2"),
+                datos.get("email"),
+                datos.get("password")
+            );
+            return ResponseEntity.ok("Registro exitoso: " + nuevo.getNombre());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/all")
