@@ -1,14 +1,10 @@
 package com.ausiasmarch.Gym.service;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.ausiasmarch.Gym.api.Tipousuario;
-import com.ausiasmarch.Gym.api.Usuario;
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
@@ -17,10 +13,8 @@ import com.ausiasmarch.Gym.repository.TipousuarioRepository;
 import com.ausiasmarch.Gym.repository.UsuarioRepository;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.sql.Date;
 import java.math.BigInteger;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 

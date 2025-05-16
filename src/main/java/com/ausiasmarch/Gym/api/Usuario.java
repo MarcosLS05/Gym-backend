@@ -1,8 +1,7 @@
 package com.ausiasmarch.Gym.api;
 
-import java.util.Map;
-import java.util.Optional;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.UsuarioService;
-import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController

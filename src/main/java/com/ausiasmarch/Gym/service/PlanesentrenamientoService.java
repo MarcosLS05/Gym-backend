@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
-import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;

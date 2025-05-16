@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
-import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
-import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.service.GrupocontrataService;
 
 

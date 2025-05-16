@@ -2,11 +2,8 @@ package com.ausiasmarch.Gym.entity;
 
 import java.sql.Date;
 import java.util.List;
-
-import com.ausiasmarch.Gym.entity.TipousuarioEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
