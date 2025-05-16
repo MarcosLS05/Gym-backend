@@ -2,6 +2,8 @@ package com.ausiasmarch.Gym.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ausiasmarch.Gym.DTO.EnviarMensajeDTO;
 import com.ausiasmarch.Gym.entity.MensajeEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
 import com.ausiasmarch.Gym.repository.MensajeRepository;
@@ -26,21 +28,21 @@ public class MensajeService {
         return mensajeRepository.findUsuariosConversados(userId);
     }
 
-    public MensajeEntity enviarMensaje(Long emisorId, Long receptorId, String contenido) {
-        UsuarioEntity emisor = oUsuarioRepository.findById(emisorId)
-                .orElseThrow(() -> new RuntimeException("Emisor no encontrado"));
-        UsuarioEntity receptor = oUsuarioRepository.findById(receptorId)
-                .orElseThrow(() -> new RuntimeException("Receptor no encontrado"));
+public MensajeEntity enviarMensaje(EnviarMensajeDTO dto) {
+    UsuarioEntity emisor = oUsuarioRepository.findById(dto.getEmisorId())
+            .orElseThrow(() -> new RuntimeException("Emisor no encontrado"));
+    UsuarioEntity receptor = oUsuarioRepository.findById(dto.getReceptorId())
+            .orElseThrow(() -> new RuntimeException("Receptor no encontrado"));
 
-        MensajeEntity mensaje = new MensajeEntity();
-        mensaje.setEmisor(emisor);
-        mensaje.setReceptor(receptor);
-        mensaje.setContenido(contenido);
-        mensaje.setFechaEnvio(LocalDateTime.now());
-        mensaje.setLeido(false);
+    MensajeEntity mensaje = new MensajeEntity();
+    mensaje.setEmisor(emisor);
+    mensaje.setReceptor(receptor);
+    mensaje.setContenido(dto.getContenido());
+    mensaje.setFechaEnvio(LocalDateTime.now());
+    mensaje.setLeido(false);
 
-        return mensajeRepository.save(mensaje);
-    }
+    return mensajeRepository.save(mensaje);
+}
 
     public void marcarComoLeido(Long mensajeId) {
         mensajeRepository.findById(mensajeId).ifPresent(m -> {

@@ -1,5 +1,7 @@
 package com.ausiasmarch.Gym.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -19,11 +21,17 @@ public class PlanesentrenamientoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100) // Campo obligatorio, máx. 100 caracteres
+    @Column(name = "dificultad", nullable = false) 
+    private String dificultad;
+
+    @Column(nullable = false, length = 100) 
     private String titulo;
 
-    @Column(length = 500) // Campo opcional, máx. 500 caracteres
+    @Column(length = 500) 
     private String descripcion;
+
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDateTime fechaCreacion;
 
     @OneToMany(mappedBy = "planesentrenamiento", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -34,9 +42,11 @@ public class PlanesentrenamientoEntity {
     public PlanesentrenamientoEntity() {
     }
 
-    public PlanesentrenamientoEntity(String titulo, String descripcion) {
+    public PlanesentrenamientoEntity(String dificultad,String titulo, String descripcion, LocalDateTime fechaCreacion) {  
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.dificultad = dificultad;
+        this.fechaCreacion = fechaCreacion; 
     }
 
     // Getters y Setters
@@ -62,6 +72,22 @@ public class PlanesentrenamientoEntity {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getDificultad() {
+    return dificultad;
+    }
+
+    public void setDificultad(String dificultad) {
+    this.dificultad = dificultad;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public int getGrupocontrata() {

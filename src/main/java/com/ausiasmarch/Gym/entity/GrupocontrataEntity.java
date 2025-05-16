@@ -2,6 +2,10 @@ package com.ausiasmarch.Gym.entity;
 
 
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +27,9 @@ public class GrupocontrataEntity {
     @Size(min = 3, max = 255)
     private String titulo;
 
+    @Column(name = "creadoEn", nullable = false)
+    private LocalDateTime creadoEn;
+
     @NotNull
     private String descripcion;
 
@@ -38,7 +45,8 @@ public class GrupocontrataEntity {
     public GrupocontrataEntity() {
     }
 
-    public GrupocontrataEntity(String titulo, String descripcion) {
+    public GrupocontrataEntity(String titulo, String descripcion, LocalDateTime creadoEn) {
+        this.creadoEn = creadoEn;
         this.titulo = titulo;
         this.descripcion = descripcion;
     }
@@ -66,6 +74,13 @@ public class GrupocontrataEntity {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public LocalDateTime getCreadoEn() {
+        return creadoEn;
+    }
+    public void setCreadoEn(LocalDateTime creadoEn) {
+        this.creadoEn = creadoEn;
     }
 
     public UsuarioEntity getUsuario() {

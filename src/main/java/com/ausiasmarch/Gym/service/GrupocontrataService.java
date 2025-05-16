@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +140,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
         if(oAuthService.isAdmin() || oAuthService.isCliente() ) {
             grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
             grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
+            grupocontrataEntity.setCreadoEn(LocalDateTime.now()); // Asigna la fecha actual
             return grupocontrataRepository.save(grupocontrataEntity);  
         }else{
             throw new UnauthorizedAccessException("No tienes permiso para crear el grupo de contrata.");

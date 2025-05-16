@@ -1,15 +1,19 @@
 package com.ausiasmarch.Gym.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
+import com.ausiasmarch.Gym.repository.UsuarioRepository;
 
 @Service
 public class PlanesentrenamientoService {
@@ -21,6 +25,9 @@ public class PlanesentrenamientoService {
 
     @Autowired
     private AuthService oAuthService;
+
+
+    private String[] difficultyLevels = { "Principiante", "Intermedio", "Avanzado" };
 
     // Obtener un plan por ID
     public PlanesentrenamientoEntity get(Long id) {
@@ -43,8 +50,10 @@ public class PlanesentrenamientoService {
         Long count = 0L;
         for (int i = 0; i < cantidad; i++) {
             PlanesentrenamientoEntity planesentrenamientoEntity = new PlanesentrenamientoEntity();
+            planesentrenamientoEntity.setDificultad(difficultyLevels[oRandomService.getRandomInt(0, difficultyLevels.length - 1)]);
             planesentrenamientoEntity.setTitulo("Plan de entrenamiento " + i);
             planesentrenamientoEntity.setDescripcion("Descripción del plan de entrenamiento " + i);
+            
             oPlanesentrenamientoRepository.save(planesentrenamientoEntity);
             count++;
         }
@@ -66,11 +75,15 @@ public class PlanesentrenamientoService {
     // Crear un nuevo plan
     public PlanesentrenamientoEntity create(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         if (oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
+            // Asignar la fecha de creación al plan
+            oPlanesentrenamientoEntity.setFechaCreacion(LocalDateTime.now());
             return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntity);
         } else {
             throw new UnauthorizedAccessException("No tienes permiso para crear planes de entrenamiento.");
         }
     }
+
+
 
     
 
@@ -107,7 +120,10 @@ public class PlanesentrenamientoService {
         oPlanesentrenamientoRepository.findById(oPlanesentrenamientoEntity.getId())
             .orElseThrow(() -> new ResourceNotFoundException(
                 "Plan de entrenamiento con ID " + oPlanesentrenamientoEntity.getId() + " no encontrado"));
-    
+        // Actualizar el campo 'dificultad' si no es nulo
+        if (oPlanesentrenamientoEntity.getDificultad() != null) {
+            oPlanesentrenamientoEntityFromDatabase.setDificultad(oPlanesentrenamientoEntity.getDificultad());
+        }
         // Actualizar el campo 'titulo' si no es nulo
         if (oPlanesentrenamientoEntity.getTitulo() != null) {
             oPlanesentrenamientoEntityFromDatabase.setTitulo(oPlanesentrenamientoEntity.getTitulo());
@@ -116,6 +132,11 @@ public class PlanesentrenamientoService {
         // Actualizar el campo 'descripcion' si no es nulo
         if (oPlanesentrenamientoEntity.getDescripcion() != null) {
             oPlanesentrenamientoEntityFromDatabase.setDescripcion(oPlanesentrenamientoEntity.getDescripcion());
+        }
+
+        // Actualizar el campo 'fechaCreacion' si no es nulo
+        if (oPlanesentrenamientoEntity.getFechaCreacion() != null) {
+            oPlanesentrenamientoEntityFromDatabase.setFechaCreacion(oPlanesentrenamientoEntity.getFechaCreacion());
         }
     
         // Guardar y devolver la entidad actualizada
