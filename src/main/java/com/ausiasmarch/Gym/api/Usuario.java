@@ -78,22 +78,7 @@ public class Usuario {
         return new ResponseEntity<UsuarioEntity>(oUsuarioService.update(oUsuarioEntity), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> datos) {
-        try {
-            UsuarioEntity nuevo = oUsuarioService.registrarCliente(
-                datos.get("nombre"),
-                datos.get("apellido1"),
-                datos.get("apellido2"),
-                datos.get("email"),
-                datos.get("password")
-            );
-            return ResponseEntity.ok("Registro exitoso: " + nuevo.getNombre());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
+    
     @DeleteMapping("/all")
     public ResponseEntity<Long> deleteAll() {
         return new ResponseEntity<Long>(oUsuarioService.deleteAll(), HttpStatus.OK);

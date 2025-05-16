@@ -18,6 +18,7 @@ import com.ausiasmarch.Gym.repository.UsuarioRepository;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.Date;
 import java.math.BigInteger;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -161,16 +162,30 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
         }
     }
 
-    public UsuarioEntity registrarCliente(String nombre, String apellido1, String apellido2, String email, String password) {
+    public UsuarioEntity registrarCliente(
+    String nombre, 
+    String apellido1, 
+    String apellido2, 
+    String email, 
+    String password, 
+    String telefono, 
+    Long codigo_postal,
+    String direccion,
+    String provincia,
+    String dni,
+    Date fecha_nacimiento,
+    boolean esEntrenador) {
     // Verifica que no exista el email ya
     if (oUsuarioRepository.findByEmail(email).isPresent()) {
         throw new RuntimeException("Ya existe un usuario con ese email.");
     }
 
     // Recupera el tipo CLIENTE (puedes hacerlo por nombre o por ID si lo conoces)
-    Long idTipoCliente = 3L; // Cambia esto al id real de tu tipo CLIENTE
-    TipousuarioEntity tipoCliente = oTipousuarioRepository.findById(idTipoCliente)
-            .orElseThrow(() -> new ResourceNotFoundException("Tipo de usuario CLIENTE no encontrado"));
+    Long idTipo = esEntrenador ? 2L : 3L; // 2 = entrenador, 3 = cliente (ajusta según tus IDs)
+    TipousuarioEntity tipoUsuario = oTipousuarioRepository.findById(idTipo)
+    .orElseThrow(() -> new ResourceNotFoundException("Tipo de usuario no encontrado"));
+    
+
 
     // Hashear la contraseña
     String hashedPassword = hashPassword(password);
@@ -180,8 +195,14 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     newUser.setApellido1(apellido1);
     newUser.setApellido2(apellido2);
     newUser.setEmail(email);
-    newUser.setPassword(hashedPassword); // Usar la contraseña hasheada
-    newUser.setTipousuario(tipoCliente);
+    newUser.setPassword(hashedPassword); 
+    newUser.setTelefono(telefono);
+    newUser.setCodigo_postal(codigo_postal);
+    newUser.setDireccion(direccion);
+    newUser.setProvincia(provincia);
+    newUser.setDni(dni);
+    newUser.setFecha_nacimiento(fecha_nacimiento);
+    newUser.setTipousuario(tipoUsuario);
 
     return oUsuarioRepository.save(newUser);
 }
@@ -218,6 +239,25 @@ private String hashPassword(String password) {
             if (oUsuarioEntity.getEmail() != null) {
                 oUsuarioEntityFromDatabase.setEmail(oUsuarioEntity.getEmail());
             }
+            if (oUsuarioEntity.getTelefono() != null) {
+                oUsuarioEntityFromDatabase.setTelefono(oUsuarioEntity.getTelefono());
+            }
+            if (oUsuarioEntity.getCodigo_postal() != 0) {
+                oUsuarioEntityFromDatabase.setCodigo_postal(oUsuarioEntity.getCodigo_postal());
+            }
+            if (oUsuarioEntity.getDireccion() != null) {
+                oUsuarioEntityFromDatabase.setDireccion(oUsuarioEntity.getDireccion());
+            }
+            if (oUsuarioEntity.getProvincia() != null) {
+                oUsuarioEntityFromDatabase.setProvincia(oUsuarioEntity.getProvincia());
+            }
+            if (oUsuarioEntity.getDni() != null) {
+                oUsuarioEntityFromDatabase.setDni(oUsuarioEntity.getDni());
+            }
+            if (oUsuarioEntity.getFecha_nacimiento() != null) {
+                oUsuarioEntityFromDatabase.setFecha_nacimiento(oUsuarioEntity.getFecha_nacimiento());
+            }
+
             return oUsuarioRepository.save(oUsuarioEntityFromDatabase);
         } else {
             throw new UnauthorizedAccessException("No tienes permisos para modificar el usuario");

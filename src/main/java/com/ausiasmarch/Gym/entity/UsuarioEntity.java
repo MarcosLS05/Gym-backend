@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.entity;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.ausiasmarch.Gym.entity.TipousuarioEntity;
@@ -40,6 +41,15 @@ public class UsuarioEntity {
     @Email
     private String email;
 
+    private String telefono;
+    private String provincia;
+    private long codigo_postal;
+    private String direccion;
+    private String dni;
+    private Date fecha_nacimiento;
+    
+
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<GrupocontrataEntity> grupocontrata;
@@ -53,6 +63,8 @@ public class UsuarioEntity {
 
 
 
+
+
     public UsuarioEntity() {
     }
 
@@ -61,14 +73,22 @@ public class UsuarioEntity {
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+
+
     }
 
-    public UsuarioEntity(Long id, String nombre, String apellido1, String apellido2, String email) {
+    public UsuarioEntity(Long id, String nombre, String apellido1, String apellido2, String email, String password, String telefono, String provincia, long codigo_postal, String direccion, String dni, Date fecha_nacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+        this.telefono = telefono;
+        this.provincia = provincia;
+        this.codigo_postal = codigo_postal;
+        this.direccion = direccion;
+        this.dni = dni;
+        this.fecha_nacimiento = fecha_nacimiento;
     }
 
     public Long getId() {
@@ -126,6 +146,44 @@ public class UsuarioEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    public String getProvincia() {
+        return provincia;
+    }
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+    public long getCodigo_postal() {
+        return codigo_postal;
+    }
+    public void setCodigo_postal(long codigo_postal) {
+        this.codigo_postal = codigo_postal;
+    }
+    public String getDireccion() {
+        return direccion;
+    }
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+    public String getDni() {
+        return dni;
+    }
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+    public Date getFecha_nacimiento() {
+        return fecha_nacimiento;
+    }
+    public void setFecha_nacimiento(Date fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
+
 
     public int getGrupocontrata() {
         return grupocontrata.size();

@@ -1,5 +1,7 @@
 package com.ausiasmarch.Gym.api;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,17 +45,37 @@ public class AuthController {
 @PermitAll
 public ResponseEntity<?> register(@RequestBody Map<String, String> datos) {
     try {
+        // Convertir codigo_postal a Long
+        Long codigoPostal = Long.valueOf(datos.get("codigo_postal"));
+
+        // Convertir fecha_nacimiento a java.util.Date y luego a java.sql.Date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaNacimiento = dateFormat.parse(datos.get("fecha_nacimiento"));
+        java.sql.Date fechaNacimientoSql = new java.sql.Date(fechaNacimiento.getTime());
+        boolean esEntrenador = Boolean.parseBoolean(datos.get("esEntrenador"));
+
+
+        // Llamar al servicio con los parámetros correctos
         UsuarioEntity nuevo = oUsuarioService.registrarCliente(
             datos.get("nombre"),
             datos.get("apellido1"),
             datos.get("apellido2"),
             datos.get("email"),
-            datos.get("password")
+            datos.get("password"),
+            datos.get("telefono"),
+            codigoPostal,
+            datos.get("direccion"),
+            datos.get("provincia"),
+            datos.get("dni"),
+            fechaNacimientoSql,
+            esEntrenador
         );
+
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Registro exitoso");
         response.put("usuario", nuevo);
-        return ResponseEntity.ok(response); // <-- JSON válido
+        return ResponseEntity.ok(response);
+
     } catch (Exception e) {
         Map<String, String> error = new HashMap<>();
         error.put("error", e.getMessage());
