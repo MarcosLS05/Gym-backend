@@ -33,11 +33,17 @@ public class AuthService {
         }
     }
 
-    private Map<String, String> getClaims(String email) {
-        Map<String, String> claims = new HashMap<>();
-        claims.put("email", email);
-        return claims;
-    };
+private Map<String, String> getClaims(String email) {
+    Map<String, String> claims = new HashMap<>();
+    UsuarioEntity oUsuario = oUsuarioRepository.findByEmail(email)
+        .orElseThrow(() -> new UnauthorizedAccessException("Usuario no encontrado"));
+
+    claims.put("email", email);
+    claims.put("id", oUsuario.getId().toString());
+    claims.put("tipousuario", oUsuario.getTipousuario().getTitulo()); // o getId() si prefieres el número
+    return claims;
+}
+
 
     public String getToken(String email) {
         return JWTHelper.generateToken(getClaims(email));

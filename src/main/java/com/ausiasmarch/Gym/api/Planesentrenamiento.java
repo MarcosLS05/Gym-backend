@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.api;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ausiasmarch.Gym.DTO.PlanCreateDTO;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
+import com.ausiasmarch.Gym.entity.UsuarioEntity;
+import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
+import com.ausiasmarch.Gym.repository.UsuarioRepository;
 import com.ausiasmarch.Gym.service.PlanesentrenamientoService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
@@ -28,6 +36,12 @@ public class Planesentrenamiento {
     
     @Autowired
     PlanesentrenamientoService oPlanesentrenamientoService;
+
+    @Autowired
+    PlanesentrenamientoRepository oPlanesentrenamientoRepository;
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
 
     @GetMapping("")
     public ResponseEntity<Page<PlanesentrenamientoEntity>> getPage(
@@ -49,6 +63,27 @@ public class Planesentrenamiento {
     public ResponseEntity<PlanesentrenamientoEntity> create(@RequestBody PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         return new ResponseEntity<PlanesentrenamientoEntity>(oPlanesentrenamientoService.create(oPlanesentrenamientoEntity), HttpStatus.OK);
     }
+
+@PostMapping("/create/{idCreador}")
+public ResponseEntity<PlanesentrenamientoEntity> createPlan(
+    @PathVariable Long idCreador,
+    @RequestBody PlanCreateDTO planDto) {
+
+    UsuarioEntity creador = oUsuarioRepository.findById(idCreador)
+        .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+    PlanesentrenamientoEntity plan = new PlanesentrenamientoEntity();
+    plan.setTitulo(planDto.titulo);
+    plan.setDescripcion(planDto.descripcion);
+    plan.setDificultad(planDto.dificultad);
+    plan.setFechaCreacion(LocalDateTime.now());
+    plan.setCreador(creador);
+
+    PlanesentrenamientoEntity saved = oPlanesentrenamientoRepository.save(plan);
+    return new ResponseEntity<>(saved, HttpStatus.CREATED);
+}
+
+
 
     @PutMapping("")
     public ResponseEntity<PlanesentrenamientoEntity> update(@RequestBody PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
