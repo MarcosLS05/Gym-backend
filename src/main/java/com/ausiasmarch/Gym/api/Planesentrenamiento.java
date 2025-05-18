@@ -1,6 +1,7 @@
 package com.ausiasmarch.Gym.api;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,11 @@ public ResponseEntity<PlanesentrenamientoEntity> createPlan(
     PlanesentrenamientoEntity saved = oPlanesentrenamientoRepository.save(plan);
     return new ResponseEntity<>(saved, HttpStatus.CREATED);
 }
+
+    @GetMapping("/misplanes/{id}")
+    public ResponseEntity<List<PlanesentrenamientoEntity>> getPlanesByCreador(@PathVariable Long id) {
+        return ResponseEntity.ok(oPlanesentrenamientoService.findByCreadorId(id));
+    }
 
 
 

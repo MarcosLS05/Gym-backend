@@ -1,6 +1,7 @@
 package com.ausiasmarch.Gym.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class PlanesentrenamientoService {
         return oPlanesentrenamientoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan de entrenamiento no encontrado: " + id));
     }
+
+    public List<PlanesentrenamientoEntity> findByCreadorId(Long idCreador) {
+    return oPlanesentrenamientoRepository.findByCreadorId(idCreador);
+}
+
 
     // Obtener una página de planes
     public Page<PlanesentrenamientoEntity> getPage(Pageable pageable, Optional<String> filter) {
@@ -132,13 +138,7 @@ public class PlanesentrenamientoService {
         // Actualizar el campo 'descripcion' si no es nulo
         if (oPlanesentrenamientoEntity.getDescripcion() != null) {
             oPlanesentrenamientoEntityFromDatabase.setDescripcion(oPlanesentrenamientoEntity.getDescripcion());
-        }
-
-        // Actualizar el campo 'fechaCreacion' si no es nulo
-        if (oPlanesentrenamientoEntity.getFechaCreacion() != null) {
-            oPlanesentrenamientoEntityFromDatabase.setFechaCreacion(oPlanesentrenamientoEntity.getFechaCreacion());
-        }
-    
+        } 
         // Guardar y devolver la entidad actualizada
         return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntityFromDatabase);
             

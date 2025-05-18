@@ -1,6 +1,9 @@
 package com.ausiasmarch.Gym.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -17,6 +20,8 @@ public interface PlanesentrenamientoRepository extends JpaRepository<Planesentre
 
     // Buscar planes por descripción (case-insensitive)
     Page<PlanesentrenamientoEntity> findByDescripcionContainingIgnoreCase(String descripcion, Pageable pageable);
+
+    List<PlanesentrenamientoEntity> findByCreadorId(Long id_creador);
 
     // Buscar por título o descripción (case-insensitive)
     Page<PlanesentrenamientoEntity> findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
