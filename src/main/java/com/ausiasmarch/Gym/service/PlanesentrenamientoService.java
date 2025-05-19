@@ -3,7 +3,7 @@ package com.ausiasmarch.Gym.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -82,7 +82,7 @@ public class PlanesentrenamientoService {
     public PlanesentrenamientoEntity create(PlanesentrenamientoEntity oPlanesentrenamientoEntity) {
         if (oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
             // Asignar la fecha de creación al plan
-            oPlanesentrenamientoEntity.setFechaCreacion(LocalDateTime.now());
+            oPlanesentrenamientoEntity.setFechaCreacion(new java.util.Date(System.currentTimeMillis()));
             return oPlanesentrenamientoRepository.save(oPlanesentrenamientoEntity);
         } else {
             throw new UnauthorizedAccessException("No tienes permiso para crear planes de entrenamiento.");

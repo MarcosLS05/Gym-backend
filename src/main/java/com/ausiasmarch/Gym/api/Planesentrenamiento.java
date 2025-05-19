@@ -1,6 +1,6 @@
 package com.ausiasmarch.Gym.api;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +77,7 @@ public ResponseEntity<PlanesentrenamientoEntity> createPlan(
     plan.setTitulo(planDto.titulo);
     plan.setDescripcion(planDto.descripcion);
     plan.setDificultad(planDto.dificultad);
-    plan.setFechaCreacion(LocalDateTime.now());
+    plan.setFechaCreacion(new Date(System.currentTimeMillis()));    
     plan.setCreador(creador);
 
     PlanesentrenamientoEntity saved = oPlanesentrenamientoRepository.save(plan);

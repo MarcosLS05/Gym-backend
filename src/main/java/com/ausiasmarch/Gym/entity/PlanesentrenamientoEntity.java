@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PlanesentrenamientoEntity {
     private String descripcion;
 
     @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion;
+    private Date fechaCreacion;
 
     @OneToMany(mappedBy = "planesentrenamiento", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -48,7 +49,7 @@ public class PlanesentrenamientoEntity {
     public PlanesentrenamientoEntity() {
     }
 
-    public PlanesentrenamientoEntity(String dificultad,String titulo, String descripcion, LocalDateTime fechaCreacion) {  
+    public PlanesentrenamientoEntity(String dificultad,String titulo, String descripcion, Date fechaCreacion) {  
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.dificultad = dificultad;
@@ -88,11 +89,11 @@ public class PlanesentrenamientoEntity {
     this.dificultad = dificultad;
     }
 
-    public LocalDateTime getFechaCreacion() {
+    public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+    public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
