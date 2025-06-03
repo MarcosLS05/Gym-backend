@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: mysql-ramboot
--- Tiempo de generación: 17-05-2025 a las 11:16:17
--- Versión del servidor: 9.2.0
--- Versión de PHP: 8.2.27
+-- Servidor: mysql
+-- Tiempo de generación: 03-06-2025 a las 17:03:52
+-- Versión del servidor: 5.7.44
+-- Versión de PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `grupocontrata` (
-  `id` bigint NOT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `descripcion` text NOT NULL,
-  `id_usuario` bigint DEFAULT NULL,
-  `id_planesentrenamiento` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `id_usuario` bigint(20) DEFAULT NULL,
+  `id_planesentrenamiento` bigint(20) DEFAULT NULL,
   `creado_en` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -40,19 +38,28 @@ CREATE TABLE `grupocontrata` (
 -- Volcado de datos para la tabla `grupocontrata`
 --
 
-INSERT INTO `grupocontrata` (`id`, `titulo`, `descripcion`, `id_usuario`, `id_planesentrenamiento`, `creado_en`) VALUES
-(1, 'Título aleatorio 0', 'Descripción aleatoria 0', 19, 5, NULL),
-(2, 'Título aleatorio 1', 'Descripción aleatoria 1', 13, 7, NULL),
-(3, 'Título aleatorio 2', 'Descripción aleatoria 2', 20, 5, NULL),
-(4, 'Título aleatorio 3', 'Descripción aleatoria 3', 2, 10, NULL),
-(5, 'Título aleatorio 4', 'Descripción aleatoria 4', 13, 10, NULL),
-(6, 'Título aleatorio 5', 'Descripción aleatoria 5', 17, 5, NULL),
-(7, 'Título aleatorio 6', 'Descripción aleatoria 6', 13, 5, NULL),
-(8, 'Título aleatorio 7', 'Descripción aleatoria 7', 19, 10, NULL),
-(9, 'Título aleatorio 8', 'Descripción aleatoria 8', 18, 3, NULL),
-(10, 'Título aleatorio 9', 'Descripción aleatoria 9', 10, 3, NULL),
-(11, 'gggg', 'gggg', 4, 3, NULL),
-(12, 'prueba', 'de contrato', 5, 3, '2025-05-16');
+INSERT INTO `grupocontrata` (`id`, `id_usuario`, `id_planesentrenamiento`, `creado_en`) VALUES
+(1, 19, 5, '2025-05-05'),
+(2, 13, 7, '2025-05-06'),
+(3, 20, 5, '2025-05-07'),
+(4, 8, 3, '2025-05-08'),
+(5, 13, 10, '2025-05-09'),
+(6, 17, 5, '2025-05-10'),
+(7, 13, 5, '2025-05-11'),
+(8, 19, 10, '2025-05-12'),
+(9, 18, 3, '2025-05-13'),
+(10, 10, 3, '2025-05-14'),
+(11, 2, 3, '2025-05-15'),
+(12, 5, 3, '2025-05-16'),
+(13, 2, 3, '2025-06-02'),
+(14, 2, 1, '2025-06-02'),
+(15, 2, 2, '2025-06-02'),
+(16, 2, 3, '2025-06-02'),
+(17, 2, 3, '2025-06-02'),
+(18, 2, 5, '2025-06-02'),
+(19, 2, 6, '2025-06-02'),
+(20, 2, 8, '2025-06-02'),
+(21, 1, 2, '2025-06-03');
 
 -- --------------------------------------------------------
 
@@ -61,13 +68,13 @@ INSERT INTO `grupocontrata` (`id`, `titulo`, `descripcion`, `id_usuario`, `id_pl
 --
 
 CREATE TABLE `mensaje` (
-  `id` bigint NOT NULL,
-  `emisor_id` bigint DEFAULT NULL,
-  `receptor_id` bigint DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `emisor_id` bigint(20) DEFAULT NULL,
+  `receptor_id` bigint(20) DEFAULT NULL,
   `contenido` text,
   `fecha_envio` timestamp NULL DEFAULT NULL,
   `leido` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -76,29 +83,37 @@ CREATE TABLE `mensaje` (
 --
 
 CREATE TABLE `planesentrenamiento` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `dificultad` varchar(255) CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
   `titulo` varchar(255) NOT NULL,
   `descripcion` text,
-  `fecha_creacion` date DEFAULT NULL
+  `fecha_creacion` date DEFAULT NULL,
+  `id_creador` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `planesentrenamiento`
 --
 
-INSERT INTO `planesentrenamiento` (`id`, `dificultad`, `titulo`, `descripcion`, `fecha_creacion`) VALUES
-(1, '', 'Plan de entrenamiento 0', 'Descripción del plan de entrenamiento 0', NULL),
-(2, '', 'Plan de entrenamiento 1', 'Descripción del plan de entrenamiento 1', NULL),
-(3, '', 'Plan de entrenamiento 2', 'Descripción del plan de entrenamiento 2', NULL),
-(4, '', 'Plan de entrenamiento 3', 'Descripción del plan de entrenamiento 3', NULL),
-(5, '', 'Plan de entrenamiento 4', 'Descripción del plan de entrenamiento 4', NULL),
-(6, '', 'Plan de entrenamiento 5', 'Descripción del plan de entrenamiento 5', NULL),
-(7, '', 'Plan de entrenamiento 6', 'Descripción del plan de entrenamiento 6', NULL),
-(8, '', 'Plan de entrenamiento 7', 'Descripción del plan de entrenamiento 7', NULL),
-(9, '', 'Plan de entrenamiento 8', 'Descripción del plan de entrenamiento 8', NULL),
-(10, '', 'Plan de entrenamiento 9', 'Descripción del plan de entrenamiento 9', NULL),
-(11, '', 'titulo de prueba', 'prueba de plan de entrenamiento', '2025-05-16');
+INSERT INTO `planesentrenamiento` (`id`, `dificultad`, `titulo`, `descripcion`, `fecha_creacion`, `id_creador`) VALUES
+(1, 'AVANZADO', 'Plan de entrenamiento 0', 'Descripción del plan de entrenamiento 0', '2025-05-16', 4),
+(2, 'AVANZADO', 'Plan de entrenamiento 1', 'Descripción del plan de entrenamiento 1', '2025-05-16', 4),
+(3, 'AVANZADO', 'Plan de entrenamiento 2', 'Descripción del plan de entrenamiento 2', '2025-05-16', 4),
+(4, 'AVANZADO', 'Plan de entrenamiento 3', 'Descripción del plan de entrenamiento 3', '2025-05-16', 4),
+(5, 'BASICO', 'Plan de entrenamiento 4', 'Descripción del plan de entrenamiento 4', '2025-05-16', 4),
+(6, 'AVANZADO', 'Plan de entrenamiento 5', 'Descripción del plan de entrenamiento 5', '2025-05-16', 1),
+(7, 'BASICO', 'Plan de entrenamiento 6', 'Descripción del plan de entrenamiento 6', '2025-05-16', 1),
+(8, 'INTERMEDIO', 'Plan de entrenamiento 7', 'Descripción del plan de entrenamiento 7', '2025-05-16', 1),
+(9, 'INTERMEDIO', 'Plan de entrenamiento 8', 'Descripción del plan de entrenamiento 8', '2025-05-16', 1),
+(10, 'INTERMEDIO', 'Plan de entrenamiento 9', 'Descripción del plan de entrenamiento 9', '2025-05-16', 1),
+(11, 'INTERMEDIO', 'titulo de prueba', 'prueba de plan de entrenamiento', '2025-05-16', 1),
+(12, 'AVANZADO', 'Hola', 'prueba', '2025-05-17', 1),
+(13, 'MEDIA', 'Plan de fuerza', 'Plan para aumentar masa muscul', '2025-05-11', 2),
+(14, 'MEDIA', 'Plan de fuerza', 'Plan para aumentar masa muscular', '2025-05-18', 2),
+(15, 'MEDIA', 'contrato', 'de prueba 18 de mayo ', '2025-05-18', 2),
+(16, 'AVANZADO', 'contrato', 'prueba final', '2025-05-18', 2),
+(17, 'BASICO', 'contrato', 'PRUEBA', '2025-05-18', 13),
+(18, 'MEDIA', 'Plan de entrenamiento de pierna', 'Este es un entrenamiento de pierna', '2025-06-02', 2);
 
 -- --------------------------------------------------------
 
@@ -107,7 +122,7 @@ INSERT INTO `planesentrenamiento` (`id`, `dificultad`, `titulo`, `descripcion`, 
 --
 
 CREATE TABLE `tipousuario` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `titulo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -127,12 +142,12 @@ INSERT INTO `tipousuario` (`id`, `titulo`) VALUES
 --
 
 CREATE TABLE `usuario` (
-  `id` bigint NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `apellido1` varchar(255) NOT NULL,
   `apellido2` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `id_tipousuario` bigint DEFAULT NULL,
+  `id_tipousuario` bigint(20) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `provincia` varchar(100) DEFAULT NULL,
@@ -147,8 +162,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nombre`, `apellido1`, `apellido2`, `email`, `id_tipousuario`, `password`, `telefono`, `provincia`, `codigo_postal`, `direccion`, `fecha_nacimiento`, `dni`) VALUES
-(1, 'Sara', 'Pérez', 'Gonzalez', 'emailSara2476@gmail.com', 3, '', '600111112', 'Madrid', '46002', 'Calle Mayor 2', '1990-01-01', '12343678A'),
-(2, 'Ana', 'Sancho', 'Pérez', 'emailAna2976@gmail.com', 2, '', '600111112', 'Madrid', '28001', 'Avenida Sol 2', '1989-02-12', '23456789B'),
+(1, 'Sara', 'Pérez', 'Gonzalez', 'emailSara2476@gmail.com', 3, '7e4b4f5529e084ecafb996c891cfbd5b5284f5b00dc155c37bbb62a9f161a72e', '600111113', 'Cuenca', '46002', 'Calle Mayor 3', '1990-01-26', '12345678A'),
+(2, 'Ana', 'Sancho', 'Pérez', 'emailAna2976@gmail.com', 2, '7e4b4f5529e084ecafb996c891cfbd5b5284f5b00dc155c37bbb62a9f161a72e', '600111112', 'Madrid', '28001', 'Avenida Sol 2', '1989-02-12', '23456789B'),
 (3, 'Lorenzo', 'Sanchez', 'Lopez', 'nuevoemail@gmail.com', 1, '7e4b4f5529e084ecafb996c891cfbd5b5284f5b00dc155c37bbb62a9f161a72e', '600111113', 'Barcelona', '08001', 'Calle Luna 3', '1995-03-23', '34567890C'),
 (4, 'Laura', 'Sancho', 'Sancho', 'emailLaura4665@gmail.com', 2, '', '600111114', 'Sevilla', '41001', 'Plaza Roja 4', '1987-04-04', '45678901D'),
 (5, 'Lucia', 'Moreno', 'Feliu', 'emailLucia5812@gmail.com', 2, '', '600111115', 'Valencia', '46002', 'Calle Verde 5', '1992-05-05', '56789012E'),
@@ -156,10 +171,10 @@ INSERT INTO `usuario` (`id`, `nombre`, `apellido1`, `apellido2`, `email`, `id_ti
 (7, 'Marta', 'Martinez', 'Gonzalez', 'emailMarta7117@gmail.com', 2, '', '600111117', 'Bilbao', '48001', 'Calle Norte 7', '1991-07-07', '78901234G'),
 (8, 'Rocio', 'Hermoso', 'Sancho', 'emailRocio7385@gmail.com', 1, '', '600111118', 'Zaragoza', '50001', 'Calle Sur 8', '1993-08-08', '89012345H'),
 (9, 'Carmen', 'Gimenez', 'Gonzalez', 'emailCarmen9387@gmail.com', 1, '', '600111119', 'Toledo', '45001', 'Paseo Oeste 9', '1988-09-09', '90123456I'),
-(10, 'Carmen', 'Escriche', 'Feliu', 'emailCarmen9198@gmail.com', 3, '', '600111120', 'Valencia', '46003', 'Calle Este 10', '1996-10-10', '01234567J'),
+(10, 'Carmen', 'Escriche', 'Feliu', 'emailCarmen9198@gmail.com', 3, '7e4b4f5529e084ecafb996c891cfbd5b5284f5b00dc155c37bbb62a9f161a72e', '600111120', 'Valencia', '46003', 'Calle Este 10', '1996-10-10', '01234567J'),
 (11, 'Pepe', 'Martinez', 'Escriche', 'emailPepe3653@gmail.com', 2, '', '600111121', 'Murcia', '30001', 'Calle Azul 11', '1994-11-11', '11223344K'),
 (12, 'Ignacio', 'Moreno', 'Feliu', 'emailIgnacio2165@gmail.com', 1, '', '600111122', 'Alicante', '03001', 'Av. Blanca 12', '1986-12-12', '22334455L'),
-(13, 'Ana', 'Gomez', 'Sanchez', 'emailAna3087@gmail.com', 2, '', '600111123', 'Castellón', '12001', 'Calle Violeta 13', '1997-01-13', '33445566M'),
+(13, 'Ana', 'Gomez', 'Sanchez', 'emailAna3087@gmail.com', 2, '7e4b4f5529e084ecafb996c891cfbd5b5284f5b00dc155c37bbb62a9f161a72e', '600111123', 'Castellón', '12001', 'Calle Violeta 13', '1997-01-13', '33445566M'),
 (14, 'Lucia', 'Lopez', 'Vidal', 'emailLucia9756@gmail.com', 2, '', '600111124', 'Málaga', '29001', 'Paseo Largo 14', '1990-02-14', '44556677N'),
 (15, 'Ana', 'Gonzalez', 'Lopez', 'emailAna6749@gmail.com', 1, '', '600111125', 'Huelva', '21001', 'Av. Media 15', '1989-03-15', '55667788O'),
 (16, 'Sara', 'Gonzalez', 'Martinez', 'emailSara6488@gmail.com', 2, '', '600111126', 'Cádiz', '11001', 'Calle Alta 16', '1993-04-16', '66778899P'),
@@ -189,18 +204,11 @@ ALTER TABLE `grupocontrata`
   ADD KEY `id_planesentrenamiento` (`id_planesentrenamiento`);
 
 --
--- Indices de la tabla `mensaje`
---
-ALTER TABLE `mensaje`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_emisor` (`emisor_id`),
-  ADD KEY `fk_receptor` (`receptor_id`);
-
---
 -- Indices de la tabla `planesentrenamiento`
 --
 ALTER TABLE `planesentrenamiento`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_planesentrenamiento_usuario` (`id_creador`);
 
 --
 -- Indices de la tabla `tipousuario`
@@ -213,7 +221,6 @@ ALTER TABLE `tipousuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `id_tipousuario` (`id_tipousuario`);
 
 --
@@ -224,31 +231,25 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `grupocontrata`
 --
 ALTER TABLE `grupocontrata`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT de la tabla `mensaje`
---
-ALTER TABLE `mensaje`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `planesentrenamiento`
 --
 ALTER TABLE `planesentrenamiento`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `tipousuario`
 --
 ALTER TABLE `tipousuario`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Restricciones para tablas volcadas
@@ -262,11 +263,10 @@ ALTER TABLE `grupocontrata`
   ADD CONSTRAINT `grupocontrata_ibfk_2` FOREIGN KEY (`id_planesentrenamiento`) REFERENCES `planesentrenamiento` (`id`);
 
 --
--- Filtros para la tabla `mensaje`
+-- Filtros para la tabla `planesentrenamiento`
 --
-ALTER TABLE `mensaje`
-  ADD CONSTRAINT `fk_emisor` FOREIGN KEY (`emisor_id`) REFERENCES `usuario` (`id`),
-  ADD CONSTRAINT `fk_receptor` FOREIGN KEY (`receptor_id`) REFERENCES `usuario` (`id`);
+ALTER TABLE `planesentrenamiento`
+  ADD CONSTRAINT `fk_planesentrenamiento_usuario` FOREIGN KEY (`id_creador`) REFERENCES `usuario` (`id`);
 
 --
 -- Filtros para la tabla `usuario`
