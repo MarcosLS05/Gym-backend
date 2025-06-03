@@ -1,10 +1,7 @@
 package com.ausiasmarch.Gym.entity;
 
 
-
-import java.sql.Date;
 import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,8 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 
 @Entity
 @Table(name = "grupocontrata")
@@ -23,15 +19,12 @@ public class GrupocontrataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull 
-    @Size(min = 3, max = 255)
-    private String titulo;
+
 
     @Column(name = "creadoEn", nullable = false)
     private LocalDateTime creadoEn;
 
-    @NotNull
-    private String descripcion;
+
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
@@ -45,10 +38,9 @@ public class GrupocontrataEntity {
     public GrupocontrataEntity() {
     }
 
-    public GrupocontrataEntity(String titulo, String descripcion, LocalDateTime creadoEn) {
+    public GrupocontrataEntity(LocalDateTime creadoEn) {
         this.creadoEn = creadoEn;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
+
     }
 
     // Getters y Setters
@@ -60,21 +52,6 @@ public class GrupocontrataEntity {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
 
     public LocalDateTime getCreadoEn() {
         return creadoEn;

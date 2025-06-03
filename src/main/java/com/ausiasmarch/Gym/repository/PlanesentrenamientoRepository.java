@@ -24,7 +24,7 @@ public interface PlanesentrenamientoRepository extends JpaRepository<Planesentre
     List<PlanesentrenamientoEntity> findByCreadorId(Long id_creador);
 
     // Buscar por título o descripción (case-insensitive)
-    Page<PlanesentrenamientoEntity> findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
-        String titulo, String descripcion, Pageable pageable);
+    Page<PlanesentrenamientoEntity> findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrDificultadContainingIgnoreCase(
+        String titulo, String descripcion, String dificultad, Pageable pageable);
 }
 

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ausiasmarch.Gym.DTO.CreateGcontrataClienteDto;
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.service.GrupocontrataService;
 
@@ -48,6 +51,26 @@ public class Grupocontrata {
         return new ResponseEntity<Page<GrupocontrataEntity>>(oGrupocontrataService.getPageXUsuario(oPageable, filter, id),
                 HttpStatus.OK);
     }
+
+    @PostMapping("/cliente")
+    public ResponseEntity<GrupocontrataEntity> addFavoritos(
+        @RequestBody CreateGcontrataClienteDto dto) {
+    
+    GrupocontrataEntity nuevaContratacion = oGrupocontrataService.crearContratacion(dto);
+    return ResponseEntity.ok(nuevaContratacion);
+    }
+
+        // Endpoint para obtener contratos paginados filtrados por id de usuario
+    @GetMapping("/pagexusuario")
+    public Page<GrupocontrataEntity> getPageByUsuarioId(
+            @RequestParam Long usuarioId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return oGrupocontrataService.getPageByUsuarioId(usuarioId, pageable);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {

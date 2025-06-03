@@ -1,6 +1,6 @@
 package com.ausiasmarch.Gym.service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.sql.Date;
@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
 import com.ausiasmarch.Gym.exception.ResourceNotFoundException;
 import com.ausiasmarch.Gym.exception.UnauthorizedAccessException;
 import com.ausiasmarch.Gym.repository.PlanesentrenamientoRepository;
-import com.ausiasmarch.Gym.repository.UsuarioRepository;
+
 
 @Service
 public class PlanesentrenamientoService {
@@ -45,12 +43,12 @@ public class PlanesentrenamientoService {
     public Page<PlanesentrenamientoEntity> getPage(Pageable pageable, Optional<String> filter) {
         if (filter.isPresent() && !filter.get().isBlank()) {
             String filtro = filter.get();
-            return oPlanesentrenamientoRepository.findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
-                    filtro, filtro, pageable);
+            return oPlanesentrenamientoRepository.findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrDificultadContainingIgnoreCase(
+                    filtro, filtro, filtro, pageable);
         } else {
             return oPlanesentrenamientoRepository.findAll(pageable);
         }
-    }
+    }   
 
     public Long randomCreate(Long cantidad) {
         Long count = 0L;

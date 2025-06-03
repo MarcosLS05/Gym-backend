@@ -14,7 +14,7 @@ public interface GrupocontrataRepository extends JpaRepository<GrupocontrataEnti
     Page<GrupocontrataEntity> findByUsuarioId(Long id, Pageable oPageable);
 
     @Query(value = "SELECT * FROM asiento WHERE (titulo LIKE %:strTitulo% OR descripcion LIKE %:strDescripcion%) AND id_usuario=:id_usuario", nativeQuery = true)
-    Page<GrupocontrataEntity> findByUsuarioIdAndTituloContainingOrDescipcionContaining(String strTitulo,
+    Page<GrupocontrataEntity> findByUsuarioIdAndTituloContainingOrDescripcionContaining(String strTitulo,
         String strDescripcion, Long id_usuario, Pageable oPageable);
 
     // Método personalizado corregido

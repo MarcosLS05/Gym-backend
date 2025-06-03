@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ausiasmarch.Gym.DTO.CreateGcontrataClienteDto;
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
 import com.ausiasmarch.Gym.entity.UsuarioEntity;
@@ -21,7 +23,7 @@ import com.ausiasmarch.Gym.repository.GrupocontrataRepository;
 public class GrupocontrataService implements ServiceInterface<GrupocontrataEntity> {
 
     @Autowired
-    private GrupocontrataRepository grupocontrataRepository;
+    private GrupocontrataRepository oGrupocontrataRepository;
 
     @Autowired
     private UsuarioRepository UsuarioRepository;
@@ -47,16 +49,12 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
         for (int i = 0; i < cantidad; i++) {
             GrupocontrataEntity grupocontrataEntity = new GrupocontrataEntity();
             
-            // Asignar valores para los campos obligatorios
-            grupocontrataEntity.setTitulo("Título aleatorio " + i);
-            grupocontrataEntity.setDescripcion("Descripción aleatoria " + i);
-            
             // Relacionar con un usuario y un plan de entrenamiento aleatorios
             grupocontrataEntity.setUsuario(oUsuarioService.randomSelection());
             grupocontrataEntity.setPlanesentrenamiento(oPlanesentrenamientoService.randomSelection());
             
             // Guardar la entidad
-            grupocontrataRepository.save(grupocontrataEntity);
+            oGrupocontrataRepository.save(grupocontrataEntity);
             count++;
         }
         return count;
@@ -64,13 +62,13 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public GrupocontrataEntity randomSelection() {
-        Long count = grupocontrataRepository.count();
+        Long count = oGrupocontrataRepository.count();
         if (count == 0) {
             throw new ResourceNotFoundException("No hay registros en la tabla grupocontrata.");
         }
         int randomIndex = oRandomService.getRandomInt(0, count.intValue() - 1);
         Pageable pageable = Pageable.ofSize(1).withPage(randomIndex);
-        Page<GrupocontrataEntity> page = grupocontrataRepository.findAll(pageable);
+        Page<GrupocontrataEntity> page = oGrupocontrataRepository.findAll(pageable);
         return page.getContent().get(0);
     }
 
@@ -78,10 +76,10 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
     public Page<GrupocontrataEntity> getPage(Pageable oPageable, Optional<String> filter) {
         if(oAuthService.isAdmin()){
             if (filter.isPresent()) {
-                return grupocontrataRepository.findByUsuarioNombreContainingOrPlanesentrenamientoTituloContaining(
+                return oGrupocontrataRepository.findByUsuarioNombreContainingOrPlanesentrenamientoTituloContaining(
                     filter.get(), filter.get(), oPageable);
             } else {
-                return grupocontrataRepository.findAll(oPageable);
+                return oGrupocontrataRepository.findAll(oPageable);
             }
         } else {
             throw new UnauthorizedAccessException("No tienes permisos para ver los grupos de contrata.");
@@ -90,11 +88,15 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     }
 
+        public Page<GrupocontrataEntity> getPageByUsuarioId(Long id, Pageable pageable) {
+        return oGrupocontrataRepository.findByUsuarioId(id, pageable);
+    }
+
     public Page<GrupocontrataEntity> getPageXUsuario(Pageable oPageable, Optional<String> filter, Optional<Long> id_usuario) {
         if (filter.isPresent()) {
             if (id_usuario.isPresent()) {
-                return grupocontrataRepository
-                        .findByUsuarioIdAndTituloContainingOrDescipcionContaining(
+                return oGrupocontrataRepository
+                        .findByUsuarioIdAndTituloContainingOrDescripcionContaining(
                                 filter.get(), filter.get(), id_usuario.get(),
                                 oPageable);
             } else {
@@ -102,7 +104,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
             }
         } else {
             if (id_usuario.isPresent()) {
-                return grupocontrataRepository.findByUsuarioId(id_usuario.get(), oPageable);
+                return oGrupocontrataRepository.findByUsuarioId(id_usuario.get(), oPageable);
             } else {
                 throw new ResourceNotFoundException("Usuario no encontrado");
             }
@@ -112,7 +114,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
     @Override
     public GrupocontrataEntity get(Long id) {
         if (oAuthService.isAdmin()) {
-            return grupocontrataRepository.findById(id)
+            return oGrupocontrataRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Grupocontrata con ID " + id + " no encontrado."));
         }
         throw new UnauthorizedAccessException("No tienes permiso para ver el grupo de contrata.");
@@ -120,14 +122,14 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public Long count() {
-        return grupocontrataRepository.count();
+        return oGrupocontrataRepository.count();
     }
 
     @Override
     public Long delete(Long id) {
         if(oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
             GrupocontrataEntity grupocontrataEntity = get(id); 
-            grupocontrataRepository.delete(grupocontrataEntity);
+            oGrupocontrataRepository.delete(grupocontrataEntity);
             return id;  
         }else{ 
             throw new UnauthorizedAccessException("No tienes permiso para borrar el grupo de contrata.");
@@ -141,7 +143,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
             grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
             grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
             grupocontrataEntity.setCreadoEn(LocalDateTime.now()); // Asigna la fecha actual
-            return grupocontrataRepository.save(grupocontrataEntity);  
+            return oGrupocontrataRepository.save(grupocontrataEntity);  
         }else{
             throw new UnauthorizedAccessException("No tienes permiso para crear el grupo de contrata.");
         }
@@ -152,7 +154,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
     public GrupocontrataEntity update(GrupocontrataEntity grupocontrataEntity) {
 
         if (oAuthService.isAdmin()) {
-            if (!grupocontrataRepository.existsById(grupocontrataEntity.getId())) {
+            if (!oGrupocontrataRepository.existsById(grupocontrataEntity.getId())) {
                 throw new ResourceNotFoundException("Grupocontrata con ID " + grupocontrataEntity.getId() + " no encontrado.");
             }
     
@@ -168,7 +170,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
                 grupocontrataEntity.setPlanesentrenamiento(plan);
             }
     
-            return grupocontrataRepository.save(grupocontrataEntity);  
+            return oGrupocontrataRepository.save(grupocontrataEntity);  
         } else {
 
             throw new UnauthorizedAccessException("No tienes permiso para modificar el grupo de contrata.");
@@ -177,12 +179,28 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     }
 
+    public GrupocontrataEntity crearContratacion(CreateGcontrataClienteDto dto) {
+    UsuarioEntity usuario = UsuarioRepository.findById(dto.getUsuarioId())
+        .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+    PlanesentrenamientoEntity plan = PlanesentrenamientoRepository.findById(dto.getPlanId())
+        .orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado"));
+
+    GrupocontrataEntity gcontrata = new GrupocontrataEntity();
+    gcontrata.setUsuario(usuario);
+    gcontrata.setPlanesentrenamiento(plan);
+    gcontrata.setCreadoEn(LocalDateTime.now()); // por ejemplo
+
+    return oGrupocontrataRepository.save(gcontrata);
+}
+
+
 
     @Override
     public Long deleteAll() {
         if(oAuthService.isAdmin()) {
-            Long count = grupocontrataRepository.count();
-            grupocontrataRepository.deleteAll();
+            Long count = oGrupocontrataRepository.count();
+            oGrupocontrataRepository.deleteAll();
             return count;
         }else{
             throw new UnauthorizedAccessException("No tienes permiso para borrar todos los grupos de contrata.");
