@@ -1,14 +1,11 @@
 package com.ausiasmarch.Gym.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.ausiasmarch.Gym.DTO.CreateGcontrataClienteDto;
 import com.ausiasmarch.Gym.entity.GrupocontrataEntity;
 import com.ausiasmarch.Gym.entity.PlanesentrenamientoEntity;
@@ -113,7 +110,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public GrupocontrataEntity get(Long id) {
-        if (oAuthService.isAdmin()) {
+        if (oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal() || oAuthService.isCliente()) {
             return oGrupocontrataRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Grupocontrata con ID " + id + " no encontrado."));
         }
@@ -127,7 +124,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     @Override
     public Long delete(Long id) {
-        if(oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal()) {
+        if(oAuthService.isAdmin() || oAuthService.isEntrenadorPersonal() || oAuthService.isCliente()) {
             GrupocontrataEntity grupocontrataEntity = get(id); 
             oGrupocontrataRepository.delete(grupocontrataEntity);
             return id;  

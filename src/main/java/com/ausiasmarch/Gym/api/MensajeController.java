@@ -1,9 +1,15 @@
 package com.ausiasmarch.Gym.api;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +41,11 @@ public class MensajeController {
         return oMensajeService.getConversacion(usuario1Id, usuario2Id);
     }
 
+        @GetMapping("/{id}")
+    public ResponseEntity<MensajeEntity> get(@PathVariable Long id) {
+        return new ResponseEntity<MensajeEntity>(oMensajeService.get(id), HttpStatus.OK);
+    }
+
     // Obtener lista de usuarios conversados
     @GetMapping("/usuarios")
     public List<UsuarioEntity> getUsuariosConversados(@RequestParam Long userId) {
@@ -51,5 +62,17 @@ public class MensajeController {
     @PostMapping("/leer/{mensajeId}")
     public void marcarComoLeido(@PathVariable Long mensajeId) {
         oMensajeService.marcarComoLeido(mensajeId);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> delete(@PathVariable Long id) {
+        return new ResponseEntity<Long>(oMensajeService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Page<MensajeEntity>> getPage(
+            Pageable oPageable,
+            @RequestParam  Optional<String> filter) {
+        return new ResponseEntity<Page<MensajeEntity>>(oMensajeService.getPage(oPageable, filter), HttpStatus.OK);
     }
 }

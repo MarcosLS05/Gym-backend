@@ -1,4 +1,6 @@
 package com.ausiasmarch.Gym.repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -30,5 +32,8 @@ public interface MensajeRepository extends JpaRepository<MensajeEntity, Long> {
     List<UsuarioEntity> findUsuariosConversados(Long userId);
 
     List<MensajeEntity> findByReceptorIdAndLeidoFalse(Long receptorId);
+
+    Page<MensajeEntity> findByContenidoContaining(
+      String filter2, Pageable oPageable);
 }
 
