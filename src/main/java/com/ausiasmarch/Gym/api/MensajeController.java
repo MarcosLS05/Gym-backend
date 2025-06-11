@@ -105,6 +105,11 @@ public ResponseEntity<MensajeEntity> update(@RequestBody MensajeEntity oMensajeE
     return ResponseEntity.ok(oMensajeService.update(oMensajeEntity));
 }
 
+    @GetMapping("/recibidos/{receptorId}")
+public ResponseEntity<List<MensajeEntity>> getMensajesRecibidos(@PathVariable Long receptorId) {
+    List<MensajeEntity> mensajes = oMensajeService.obtenerMensajesRecibidos(receptorId);
+    return ResponseEntity.ok(mensajes);
+}
 
 
 

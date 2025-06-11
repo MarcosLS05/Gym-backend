@@ -109,7 +109,10 @@ public MensajeEntity create(MensajeEntity oMensajeEntity) {
 }
 
 
-    
+public List<MensajeEntity> obtenerMensajesRecibidos(Long receptorId) {
+    return oMensajeRepository.findMensajesRecibidos(receptorId);
+}
+  
 
 public MensajeEntity update(MensajeEntity oMensajeEntity) {
 
