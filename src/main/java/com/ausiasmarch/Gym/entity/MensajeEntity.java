@@ -100,6 +100,14 @@ public class MensajeEntity {
         this.leido = leido;
     }
 
+    public UsuarioEntity getUsuario() {
+    return receptor;
+    }
+
+    public void setUsuario(UsuarioEntity receptor) {
+        this.receptor = receptor;
+    }
+
    
 }
 
