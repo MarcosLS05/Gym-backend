@@ -181,15 +181,14 @@ public class UsuarioService implements ServiceInterface<UsuarioEntity> {
     
 
 
-    // Hashear la contraseña
-    String hashedPassword = hashPassword(password);
+
 
     UsuarioEntity newUser = new UsuarioEntity();
     newUser.setNombre(nombre);
     newUser.setApellido1(apellido1);
     newUser.setApellido2(apellido2);
     newUser.setEmail(email);
-    newUser.setPassword(hashedPassword); 
+    newUser.setPassword(password); 
     newUser.setTelefono(telefono);
     newUser.setCodigo_postal(codigo_postal);
     newUser.setDireccion(direccion);
