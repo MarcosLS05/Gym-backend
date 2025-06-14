@@ -1,5 +1,7 @@
 package com.ausiasmarch.Gym.service;
 
+
+import java.util.Date;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,18 +136,21 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
 
     }
 
-    @Override
-    public GrupocontrataEntity create(GrupocontrataEntity grupocontrataEntity) {
-        if(oAuthService.isAdmin() || oAuthService.isCliente() ) {
-            grupocontrataEntity.setUsuario(UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get());
-            grupocontrataEntity.setPlanesentrenamiento(PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get());
-            grupocontrataEntity.setCreadoEn(LocalDateTime.now()); // Asigna la fecha actual
-            return oGrupocontrataRepository.save(grupocontrataEntity);  
-        }else{
-            throw new UnauthorizedAccessException("No tienes permiso para crear el grupo de contrata.");
-        }
-
+@Override
+public GrupocontrataEntity create(GrupocontrataEntity grupocontrataEntity) {
+    if(oAuthService.isAdmin() || oAuthService.isCliente()) {
+        grupocontrataEntity.setUsuario(
+            UsuarioRepository.findById(grupocontrataEntity.getUsuario().getId()).get()
+        );
+        grupocontrataEntity.setPlanesentrenamiento(
+            PlanesentrenamientoRepository.findById(grupocontrataEntity.getPlanesentrenamiento().getId()).get()
+        );
+        grupocontrataEntity.setCreadoEn(new Date()); // ✅ Cambiado a java.util.Date
+        return oGrupocontrataRepository.save(grupocontrataEntity);  
+    } else {
+        throw new UnauthorizedAccessException("No tienes permiso para crear el grupo de contrata.");
     }
+}
 
     @Override
     public GrupocontrataEntity update(GrupocontrataEntity grupocontrataEntity) {
@@ -186,7 +191,7 @@ public class GrupocontrataService implements ServiceInterface<GrupocontrataEntit
     GrupocontrataEntity gcontrata = new GrupocontrataEntity();
     gcontrata.setUsuario(usuario);
     gcontrata.setPlanesentrenamiento(plan);
-    gcontrata.setCreadoEn(LocalDateTime.now()); // por ejemplo
+    gcontrata.setCreadoEn(new Date()); // por ejemplo
 
     return oGrupocontrataRepository.save(gcontrata);
 }

@@ -1,6 +1,7 @@
 package com.ausiasmarch.Gym.api;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +78,7 @@ public ResponseEntity<MensajeEntity> createMensaje(@RequestBody @Valid EnviarMen
 
         MensajeEntity mensaje = new MensajeEntity();
         mensaje.setContenido(dto.getContenido());
-        mensaje.setFechaEnvio(LocalDateTime.now());
+        mensaje.setFechaEnvio(new Date());
 
         // Establecer receptor
         UsuarioEntity receptor = oUsuarioRepository.findById(dto.getReceptorId())

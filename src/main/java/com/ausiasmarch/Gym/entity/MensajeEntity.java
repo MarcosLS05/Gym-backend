@@ -1,5 +1,6 @@
 package com.ausiasmarch.Gym.entity;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class MensajeEntity {
     private String contenido;
 
     @Column(name = "fecha_envio", nullable = false)
-    private LocalDateTime fechaEnvio;
+    private Date fechaEnvio;
 
     @Column(nullable = false)
     private boolean leido = false;
@@ -43,7 +44,7 @@ public class MensajeEntity {
     }
 
     public MensajeEntity(Long id, UsuarioEntity emisor, UsuarioEntity receptor, String contenido,
-            LocalDateTime fechaEnvio, boolean leido) {
+            Date fechaEnvio, boolean leido) {
         this.id = id;
         this.emisor = emisor;
         this.receptor = receptor;
@@ -84,11 +85,11 @@ public class MensajeEntity {
         this.contenido = contenido;
     }
 
-    public LocalDateTime getFechaEnvio() {
+    public Date getFechaEnvio() {
         return fechaEnvio;
     }
 
-    public void setFechaEnvio(LocalDateTime fechaEnvio) {
+    public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
     }
 

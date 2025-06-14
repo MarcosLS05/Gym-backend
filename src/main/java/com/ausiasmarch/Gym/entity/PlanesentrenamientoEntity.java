@@ -3,6 +3,8 @@ package com.ausiasmarch.Gym.entity;
 import java.sql.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,7 +41,7 @@ public class PlanesentrenamientoEntity {
     private List<GrupocontrataEntity> grupocontrata;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_creador", nullable = false)
+    @JoinColumn(name = "id_creador")
     private UsuarioEntity creador;
 
 

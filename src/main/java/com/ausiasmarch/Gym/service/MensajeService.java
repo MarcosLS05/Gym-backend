@@ -1,7 +1,7 @@
 package com.ausiasmarch.Gym.service;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import com.ausiasmarch.Gym.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
-import java.time.LocalDateTime;
+
 
 
 @Service
@@ -50,7 +50,7 @@ public MensajeEntity enviarMensaje(EnviarMensajeDTO dto) {
     mensaje.setEmisor(emisor);
     mensaje.setReceptor(receptor);
     mensaje.setContenido(dto.getContenido());
-    mensaje.setFechaEnvio(LocalDateTime.now());
+    mensaje.setFechaEnvio(new Date());
     mensaje.setLeido(false);
 
     return oMensajeRepository.save(mensaje);
@@ -128,6 +128,13 @@ public MensajeEntity update(MensajeEntity oMensajeEntity) {
     // Validar contenido
     if (oMensajeEntity.getContenido() == null || oMensajeEntity.getContenido().trim().isEmpty()) {
         throw new IllegalArgumentException("El contenido del mensaje no puede estar vacío.");
+    }
+
+    // Validar fecha de envío
+    if (oMensajeEntity.getFechaEnvio() == null) {
+        oMensajeEntity.setFechaEnvio(new Date()); // Asignar fecha actual si no se proporciona
+    } else if (oMensajeEntity.getFechaEnvio().after(new Date())) {
+        throw new IllegalArgumentException("La fecha de envío no puede ser futura.");
     }
 
     // Validar emisor

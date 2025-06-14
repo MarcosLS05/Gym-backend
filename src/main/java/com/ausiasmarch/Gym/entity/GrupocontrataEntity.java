@@ -1,7 +1,7 @@
 package com.ausiasmarch.Gym.entity;
 
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +22,7 @@ public class GrupocontrataEntity {
 
 
     @Column(name = "creadoEn", nullable = false)
-    private LocalDateTime creadoEn;
+    private Date creadoEn;
 
 
 
@@ -38,7 +38,7 @@ public class GrupocontrataEntity {
     public GrupocontrataEntity() {
     }
 
-    public GrupocontrataEntity(LocalDateTime creadoEn) {
+    public GrupocontrataEntity(Date creadoEn) {
         this.creadoEn = creadoEn;
 
     }
@@ -53,10 +53,10 @@ public class GrupocontrataEntity {
     }
 
 
-    public LocalDateTime getCreadoEn() {
+    public Date getCreadoEn() {
         return creadoEn;
     }
-    public void setCreadoEn(LocalDateTime creadoEn) {
+    public void setCreadoEn(Date creadoEn) {
         this.creadoEn = creadoEn;
     }
 
